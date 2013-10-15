@@ -167,7 +167,7 @@
 						<maxIdleTime>600000</maxIdleTime> <!-- 10 minutes in milliseconds! -->
 						<lowResourcesMaxIdleTime>600000</lowResourcesMaxIdleTime>
 					</connector>
-					<scanIntervalSeconds>1</scanIntervalSeconds>
+					<scanIntervalSeconds>0</scanIntervalSeconds>
 					<stopKey>foo</stopKey>
 					<stopPort>9999</stopPort>
 					<webApp>
