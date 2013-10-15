@@ -139,11 +139,11 @@
 			<version>1.2.16</version>
 		</dependency>
 		
-		<dependency>
+<!-- 		<dependency>
 	        <groupId>cloudscale</groupId>
 	        <artifactId>cloudscale.core</artifactId>
 	        <version>0.2.0</version>
-		</dependency>
+		</dependency> -->
 
 	</dependencies>
 	<build>
