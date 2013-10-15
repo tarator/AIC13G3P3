@@ -13,7 +13,7 @@
 	<properties>
 		<java-version>1.7</java-version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<spring3.version>3.2.4.RELEASE</spring3.version>
+		<spring3.version>3.2.2.RELEASE</spring3.version>
 		<spring3.security.version>3.2.0 RC1</spring3.security.version>
 		<jetty.version>9.0.6.v20130930 </jetty.version>
 		<hibernate4.version>4.2.6.Final</hibernate4.version>
@@ -21,7 +21,7 @@
 	</properties>
 
 	<dependencies>
-		<dependency>
+ 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
 			<version>3.1-b07</version>
@@ -110,14 +110,6 @@
 			<artifactId>mysql-connector-java</artifactId>
 			<version>5.1.24</version>
 		</dependency>
-		
-		<dependency>
-	        <groupId>cloudscale</groupId>
-	        <artifactId>cloudscale.core</artifactId>
-	        <version>0.2.0</version>
-		</dependency>
-
-
 
 		<dependency>
 			<groupId>junit</groupId>
@@ -145,6 +137,12 @@
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
 			<version>1.2.16</version>
+		</dependency>
+		
+		<dependency>
+	        <groupId>cloudscale</groupId>
+	        <artifactId>cloudscale.core</artifactId>
+	        <version>0.2.0</version>
 		</dependency>
 
 	</dependencies>
