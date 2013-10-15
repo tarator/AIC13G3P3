@@ -3,10 +3,10 @@ package ac.at.tuwien.aic13;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
-import ac.at.tuwien.aic13.config.LifepulseWebConfig;
+import ac.at.tuwien.aic13.config.WebAppConfig;
 import ac.at.tuwien.aic13.config.ApplicationConfig;
 
-public class LifepulseServletInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
+public class ServletInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 
 	@Override
 	protected Class<?>[] getRootConfigClasses() {
@@ -15,7 +15,7 @@ public class LifepulseServletInitializer extends AbstractAnnotationConfigDispatc
 
 	@Override
 	protected Class<?>[] getServletConfigClasses() {
-		return new Class[] {LifepulseWebConfig.class };
+		return new Class[] {WebAppConfig.class };
 	}
 
 	@Override

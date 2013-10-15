@@ -8,7 +8,7 @@ import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
 
-import ac.at.tuwien.aic13.config.LifepulseWebConfig;
+import ac.at.tuwien.aic13.config.WebAppConfig;
 import ac.at.tuwien.aic13.config.ApplicationConfig;
 
 public class MyWebAppInitializer {//implements WebApplicationInitializer {

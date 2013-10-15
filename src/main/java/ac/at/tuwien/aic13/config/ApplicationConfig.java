@@ -96,7 +96,6 @@ public class ApplicationConfig {
 	 */
 	@Bean(name="dataSource")
 	public DataSource dataSource() {
-		System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<< BEAN DATASOURCE >>>>>>>>>>>>>>>>>>");
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
 		dataSource.setDriverClassName("com.mysql.jdbc.Driver");
 		dataSource.setUrl(getDatabaseUrl());

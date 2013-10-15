@@ -18,9 +18,9 @@ import ac.at.tuwien.aic13.services.impl.MainServiceImpl;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan(value= {"ac.at.tuwien.aic13.AIC13G3P3.AIC13G3P3.controllers"})
+@ComponentScan(value= {"ac.at.tuwien.aic13.controllers"})
 @EnableTransactionManagement(proxyTargetClass=true, mode=AdviceMode.PROXY)
-public class LifepulseWebConfig extends WebMvcConfigurerAdapter{ 
+public class WebAppConfig extends WebMvcConfigurerAdapter{ 
 	@Autowired
 	ApplicationContext context;
 	
