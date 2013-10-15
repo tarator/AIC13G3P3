@@ -10,7 +10,7 @@ import javax.persistence.OneToMany;
 
 import ac.at.tuwien.aic13.persistence.DTO;
 
-@Entity(name="melder")
+@Entity(name="Melder")
 public class Melder implements DTO {
 
 	/**

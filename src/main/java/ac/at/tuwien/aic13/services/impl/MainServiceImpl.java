@@ -35,5 +35,10 @@ public class MainServiceImpl implements MainService {
 		return dao.readAll(LogEntry.class);
 	}
 
+	@Override
+	public List<Melder> getMelder() throws ServiceException {
+		return dao.readAll(Melder.class);
+	}
+
 
 }

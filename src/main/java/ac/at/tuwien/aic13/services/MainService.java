@@ -13,4 +13,6 @@ public interface MainService {
 	public void addLogEntry(LogEntry logEntry) throws ServiceException;
 	
 	public List<LogEntry> getLogs(Melder melder) throws ServiceException; 
+	
+	public List<Melder> getMelder() throws ServiceException; 
 }
