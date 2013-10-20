@@ -1,4 +1,4 @@
-package at.ac.aic13.test;
+package at.ac.tuwien.aic13.test;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
