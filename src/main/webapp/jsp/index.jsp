@@ -14,7 +14,7 @@
             This is MVC (Model View Controller) in action.
         </p>
         <p>
-            Simple values can be rendered as so \${} i.e. here's the value from the controller: <blockquote>${hello}</blockquote>
+            Simple values can be rendered as so  i.e. here's the value from the controller: <blockquote>${hello}</blockquote>
         </p>
  
     </body>

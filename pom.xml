@@ -5,11 +5,11 @@
 	<artifactId>G3P3</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
-	<name>G3P3</name>
+	<name></name>
 
 	<properties>
 		<failIfNoTests>false</failIfNoTests>
-		<javaVersion>1.7</javaVersion>
+		<javaVersion>1.6</javaVersion>
 		<aspectj.version>1.7.0</aspectj.version>
 		<cloudscale.version>0.3.0-SNAPSHOT</cloudscale.version>
 		<spring.version>3.0.6.RELEASE</spring.version>
@@ -32,6 +32,18 @@
 			<artifactId>spring-webmvc</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
+
+		<dependency>
+			<groupId>org.mortbay.jetty</groupId>
+			<artifactId>maven-jetty-plugin</artifactId>
+			<version>6.1.26</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.jdt.core.compiler</groupId>
+			<artifactId>ecj</artifactId>
+			<version>3.7.1</version>
+		</dependency>
+
 
 		<!-- <dependency> <groupId>cloudscale</groupId> <artifactId>cloudscale.cli</artifactId> 
 			<version>${cloudscale.version}</version> </dependency> -->
@@ -117,6 +129,18 @@
 							<classpath />
 							<argument>at.ac.tuwien.infosys.cloudscale.sample.sentiment.Main</argument>
 						</arguments>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.mortbay.jetty</groupId>
+					<artifactId>maven-jetty-plugin</artifactId>
+					<version>6.1.26</version>
+					<configuration>
+						<webApp>
+							<contextPath>/G3P3/</contextPath>
+						</webApp>
+						<!-- <daemon>true</daemon> <stopPort>8181</stopPort> <stopKey>stop-webapp</stopKey> -->
+						<scanIntervalSeconds>10</scanIntervalSeconds>
 					</configuration>
 				</plugin>
 			</plugins>
