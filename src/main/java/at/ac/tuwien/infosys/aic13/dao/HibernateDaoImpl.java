@@ -47,7 +47,7 @@ public class HibernateDaoImpl implements GenericDao {
 	 * @see therapygroup.util.GenericDao#create(therapygroup.util.DTO)
 	 */
 	@Override
-	public <T extends DTO> void create(T element) {
+	public <T extends DTO> void create(T element) throws DaoException{
 		if(sessionFactory.getCurrentSession().contains(element)) throw new DaoException("Element already exists in session!");
 		sessionFactory.getCurrentSession().save(element);
 		//		sessionFactory.getCurrentSession().refresh(element);
@@ -59,7 +59,7 @@ public class HibernateDaoImpl implements GenericDao {
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
-	public <T extends DTO> T read(T element) {
+	public <T extends DTO> T read(T element) throws DaoException {
 		if(element == null){
 			throw new DaoException("Element must not be null. (TOM3NI)");
 		}
@@ -76,7 +76,7 @@ public class HibernateDaoImpl implements GenericDao {
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
-	public <T extends DTO> List<T> findByExample(T example){
+	public <T extends DTO> List<T> findByExample(T example) throws DaoException{
 		return findByExamples(example);
 	}
 
@@ -144,7 +144,7 @@ public class HibernateDaoImpl implements GenericDao {
 	 * @see therapygroup.util.GenericDao#readAll(java.lang.Class)
 	 */
 	@Override
-	public <T extends DTO> List<T> readAll(Class<T> clazz) {
+	public <T extends DTO> List<T> readAll(Class<T> clazz) throws DaoException{
 		return readLimit(clazz, 500);
 	}
 

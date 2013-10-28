@@ -31,7 +31,7 @@ public interface GenericDao {
 	 * @return the t
 	 * @see therapygroup.util.GenericDao#read(Class)
 	 */
-	public <T extends DTO> T read(T element);
+	public <T extends DTO> T read(T element) throws DaoException;
 	
 	/**
 	 * Read a specific DTO with the given ID.

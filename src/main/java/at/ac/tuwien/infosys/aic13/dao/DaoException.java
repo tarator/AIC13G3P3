@@ -1,6 +1,6 @@
 package at.ac.tuwien.infosys.aic13.dao;
 
-public class DaoException extends RuntimeException {
+public class DaoException extends Exception {
 
 	/**
 	 * 

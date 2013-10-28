@@ -4,6 +4,8 @@ import at.ac.tuwien.infosys.aic13.dto.Company;
 
 public interface CompanyService {
 
-	public void createCompany(Company company);
+	public void createCompany(Company company) throws ServiceException;
+	
+	public Company getCompany(String companyName) throws ServiceException;
 	
 }

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import at.ac.tuwien.infosys.aic13.dto.Company;
 import at.ac.tuwien.infosys.aic13.service.CompanyService;
+import at.ac.tuwien.infosys.aic13.service.ServiceException;
  
 @Controller
 public class DefaultController {
@@ -15,11 +16,15 @@ public class DefaultController {
 	@Autowired private CompanyService cs;
 	
     @RequestMapping(value="/", method= RequestMethod.GET)
-    public String index(Model map) {
-        map.addAttribute("hello", "Hello Spring from Eclipse!!");
+    public String index(Model model) {
+        model.addAttribute("hello", "Hello Spring from Eclipse!!");
         Company c = new Company();
         c.setName("Coca Cola");
-        cs.createCompany(c);
+        try {
+			cs.createCompany(c);
+		} catch (ServiceException e) {
+			model.addAttribute("error", e.getMessage());
+		}
         return "index";
     }
  
