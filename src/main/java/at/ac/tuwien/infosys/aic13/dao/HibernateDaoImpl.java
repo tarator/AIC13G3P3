@@ -49,9 +49,15 @@ public class HibernateDaoImpl implements GenericDao {
 	@Override
 	public <T extends DTO> void create(T element) throws DaoException{
 		if(sessionFactory.getCurrentSession().contains(element)) throw new DaoException("Element already exists in session!");
-		sessionFactory.getCurrentSession().save(element);
+		try{
+			sessionFactory.getCurrentSession().save(element);
+			logger.debug("saved " + element.toString());
+		}catch(HibernateException e){
+			throw new DaoException(e);
+		}
+		
 		//		sessionFactory.getCurrentSession().refresh(element);
-		logger.info("saved " + element.toString());
+		
 	}
 
 	/* (non-Javadoc)

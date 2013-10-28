@@ -1,5 +1,7 @@
 package at.ac.tuwien.infosys.aic13.service.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -9,13 +11,14 @@ import at.ac.tuwien.infosys.aic13.dto.Company;
 import at.ac.tuwien.infosys.aic13.service.CompanyService;
 import at.ac.tuwien.infosys.aic13.service.ServiceException;
 
-@Transactional(readOnly=true)
+@Transactional(readOnly=true, rollbackFor={ServiceException.class})
 public class CompanyServiceImpl implements CompanyService {
 
+	private static final Logger logger = LoggerFactory.getLogger(CompanyServiceImpl.class); 
 	@Autowired GenericDao dao;
 	
 	@Override
-	@Transactional(readOnly=false)
+	@Transactional(readOnly=false, rollbackFor={ServiceException.class})
 	public void createCompany(Company company) throws ServiceException{
 		try {
 			dao.create(company);
