@@ -1,5 +1,8 @@
 package at.ac.tuwien.infosys.aic13.service.impl;
 
+import java.util.Date;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +23,10 @@ public class CompanyServiceImpl implements CompanyService {
 	@Override
 	@Transactional(readOnly=false, rollbackFor={ServiceException.class})
 	public void createCompany(Company company) throws ServiceException{
+		if(company == null  || company.getName() == null || company.getName().trim().length()<2){
+			throw new ServiceException("Company Name must contain at least 2 characters.");
+		}
+		company.setCreationDate(new Date());
 		try {
 			dao.create(company);
 		} catch (DaoException e) {
@@ -30,8 +37,18 @@ public class CompanyServiceImpl implements CompanyService {
 
 	@Override
 	public Company getCompany(String companyName) throws ServiceException {
-		// TODO Auto-generated method stub
-		return null;
+		throw new ServiceException("This function was not implemented yet.");
 	}
+
+	@Override
+	public List<Company> getAllCompanies() throws ServiceException {
+		try {
+			return dao.readAll(Company.class);
+		} catch (DaoException e) {
+			throw new ServiceException("Could not load company list.");
+		}
+	}
+	
+	
 
 }

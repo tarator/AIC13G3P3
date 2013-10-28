@@ -9,20 +9,27 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <h1>Hello Spring</h1>
- 
-        <p>
-            This was passed in from the controller thus showing that
-            the controller was accessed before the page was rendered.
-            This is MVC (Model View Controller) in action.
-        </p>
-        <p>
-            Simple values can be rendered as so  i.e. here's the value from the controller: <blockquote>${hello}</blockquote>
-        </p>
+    	<h3>Register new Company:</h3>
+       	<form:form id="registerCompanyForm" modelAttribute="company" action="registerCompany" method="POST" >
+			<form:label path="name">CompanyName:</form:label>
+			<form:input path="name"/>
+			<form:label path="password">Password:</form:label>
+			<form:password path="password"/>       	
+       		<button class="btn btn-primary" id="registerCompanySubmitButton" type="submit">Register Company</button>
+       	</form:form>
         
-        <c:if test="${not empty error }">
-            <h3><c:out value="${error }"></c:out></h3>
-        </c:if>
+        <h3>List all registered companies:</h3>
+        <table>
+        	<tr><th>Name</th><th>Creation date</th></tr>
+	        <c:forEach items="${companies}" var="comp">
+	        	<tr>
+	        		<td><c:out value="${comp.name}" /></td>
+	        		<td><c:out value="${comp.creationDate}" /></td>
+	        	</tr>
+	        </c:forEach>
+        
+        </table>
+        
  
     </body>
 </html>

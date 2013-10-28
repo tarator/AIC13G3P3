@@ -1,10 +1,14 @@
 package at.ac.tuwien.infosys.aic13.dto;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import at.ac.tuwien.infosys.aic13.dao.DTO;
 
@@ -25,6 +29,13 @@ public class Company implements DTO{
 	
 	@Column(name="name", unique=true, nullable=false)
     private String name;
+	
+	@Column(name="password", nullable=false)
+	private String password;
+	
+	@Temporal(value=TemporalType.TIMESTAMP)
+	@Column(name="creationDate", nullable=false)
+	private Date creationDate;
 
 	public Long getId() {
 		return id;
@@ -50,6 +61,22 @@ public class Company implements DTO{
 	@Override
 	public String toString() {
 		return "Company [id=" + id + ", name=" + name + "]";
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public Date getCreationDate() {
+		return creationDate;
+	}
+
+	public void setCreationDate(Date creationDate) {
+		this.creationDate = creationDate;
 	}
 	
 	
