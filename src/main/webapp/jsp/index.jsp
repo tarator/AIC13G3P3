@@ -19,8 +19,9 @@
         <p>
             Simple values can be rendered as so  i.e. here's the value from the controller: <blockquote>${hello}</blockquote>
         </p>
+        
         <c:if test="${not empty error }">
-            <c:out value="${error }"></c:out>	
+            <h3><c:out value="${error }"></c:out></h3>
         </c:if>
  
     </body>
