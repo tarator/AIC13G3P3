@@ -7,7 +7,9 @@ import org.springframework.context.annotation.Scope;
 import at.ac.tuwien.infosys.aic13.dao.GenericDao;
 import at.ac.tuwien.infosys.aic13.dao.HibernateDaoImpl;
 import at.ac.tuwien.infosys.aic13.service.CompanyService;
+import at.ac.tuwien.infosys.aic13.service.QueryService;
 import at.ac.tuwien.infosys.aic13.service.impl.CompanyServiceImpl;
+import at.ac.tuwien.infosys.aic13.service.impl.QueryServiceImpl;
 
 
 
@@ -23,6 +25,11 @@ public class WebAppConfig {
 	@Bean(name="companyService")
 	public CompanyService companyService(){
 		return new CompanyServiceImpl();
+	}
+	
+	@Bean(name="queryService")
+	public QueryService queryService(){
+		return new QueryServiceImpl();
 	}
 	
 }

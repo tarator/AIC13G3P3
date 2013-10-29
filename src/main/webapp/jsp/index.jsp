@@ -9,12 +9,16 @@
         <title>JSP Page</title>
     </head>
     <body>
+    	<c:if test="${not empty error }">
+            	<h3>Error occured: <c:out value="${error }"></c:out></h3>
+        </c:if> 
+        <c:if test="${not empty message }">
+            	<h3><c:out value="${message }"></c:out></h3>
+        </c:if>  
     	<h3>Register new Company:</h3>
        	<form:form id="registerCompanyForm" modelAttribute="company" action="registerCompany" method="POST" >
 			<form:label path="name">CompanyName:</form:label>
-			<form:input path="name"/>
-			<form:label path="password">Password:</form:label>
-			<form:password path="password"/>       	
+			<form:input path="name"/>     	
        		<button class="btn btn-primary" id="registerCompanySubmitButton" type="submit">Register Company</button>
        	</form:form>
         
@@ -23,7 +27,7 @@
         	<tr><th>Name</th><th>Creation date</th></tr>
 	        <c:forEach items="${companies}" var="comp">
 	        	<tr>
-	        		<td><c:out value="${comp.name}" /></td>
+	        		<td><a href='<c:url value="/${comp.name}/" />'><c:out value="${comp.name}" /></a></td>
 	        		<td><c:out value="${comp.creationDate}" /></td>
 	        	</tr>
 	        </c:forEach>

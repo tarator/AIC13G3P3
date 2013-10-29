@@ -22,7 +22,7 @@ public class CompanyServiceImpl implements CompanyService {
 	
 	@Override
 	@Transactional(readOnly=false, rollbackFor={ServiceException.class})
-	public void createCompany(Company company) throws ServiceException{
+	public Company createCompany(Company company) throws ServiceException{
 		if(company == null  || company.getName() == null || company.getName().trim().length()<2){
 			throw new ServiceException("Company Name must contain at least 2 characters.");
 		}
@@ -32,12 +32,13 @@ public class CompanyServiceImpl implements CompanyService {
 		} catch (DaoException e) {
 			throw new ServiceException("Could not create company.", e);
 		}
+		return company;
 
 	}
 
 	@Override
 	public Company getCompany(String companyName) throws ServiceException {
-		throw new ServiceException("This function was not implemented yet.");
+		throw new ServiceException("This function is not implemented yet.");
 	}
 
 	@Override
