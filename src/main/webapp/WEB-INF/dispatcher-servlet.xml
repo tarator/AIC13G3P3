@@ -31,8 +31,8 @@
 		<property name="hibernateProperties">
 			<props>
 				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
-				<prop key="hibernate.show_sql">true</prop>
-				<prop key="hibernate.hbm2ddl.auto">create-drop</prop>
+				<prop key="hibernate.show_sql">false</prop>
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
 			</props>
 		</property>
 	</bean>
@@ -48,6 +48,14 @@
 			value="org.springframework.web.servlet.view.JstlView" />
 		<property name="prefix" value="/jsp/" />
 		<property name="suffix" value=".jsp" />
+	</bean>
+	
+	<bean id="g3p3Properties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+	  <property name="locations">
+	    <list>
+	      <value>classpath*:aic13g3p3.properties</value>
+	    </list>
+	  </property>
 	</bean>
 
 </beans>

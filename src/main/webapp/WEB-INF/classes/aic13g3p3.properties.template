@@ -1,0 +1,6 @@
+
+# Class used for SentimentAnalysis. Must implement SentimentAnalysisService
+g3p3.sentimentAnalysisServiceClass=at.ac.tuwien.infosys.aic13.service.impl.SentimentAnalysisServiceDummyImpl
+
+# Delay between two sentimentAnalysis calls.
+g3p3.sentimentnalysis.delayms=5000
