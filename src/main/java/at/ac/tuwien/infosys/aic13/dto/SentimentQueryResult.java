@@ -23,10 +23,10 @@ public class SentimentQueryResult implements DTO{
 	 */
 	private static final long serialVersionUID = 1831336420562966811L;
 	
-	@GenericGenerator(name = "generator", strategy = "foreign", 
+	@GenericGenerator(name = "generator-VHJXE7", strategy = "foreign", 
 		parameters = @Parameter(name = "property", value = "query"))
 	@Id
-	@GeneratedValue(generator = "generator")
+	@GeneratedValue(generator = "generator-VHJXE7")
     @Column(name="id")
 	private Long id;
 	
