@@ -8,13 +8,23 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Queries</title>
     </head>
-    <body>      
+    <body>
+    	   
         <c:choose>
         	<c:when test="${not empty error }">
             	<h3>Error occured: <c:out value="${error}"></c:out></h3>
             </c:when>       
         	<c:otherwise>
-				<p>Queries for Company <strong><c:out value="${company.name}" /></strong>.</p>
+        		<h3>Create new query for company <strong><c:out value="${company.name}" /></strong></h3>
+		       	<form:form id="createQueryForm" modelAttribute="queryFormBean" action="createQuery/" method="POST" >
+					<form:label path="from">Date From:</form:label>
+					<form:input path="from"/>   
+					<form:label path="to">Date To:</form:label>
+					<form:input path="to"/>   	
+		       		<button class="btn btn-primary" id="createQuerySubmitButton" type="submit">Create Query</button>
+		       	</form:form>   
+        	
+				<h3>Queries for Company <strong><c:out value="${company.name}" /></strong>.</h3>
 				<table border="1">
 					<tr>
 		        		<th>Date from</th><th>Date to</th><th>Processing/Processed</th><th>Tweet Count</th><th>result</th>

@@ -15,6 +15,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import at.ac.tuwien.infosys.aic13.dao.DTO;
 
 @Entity
@@ -39,10 +41,12 @@ public class SentimentQuery implements DTO {
 	
 	@Column(name="dateFrom")
 	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(pattern="dd.MM.yyyy HH:mm")
 	private Date from;
 	
 	@Column(name="dateTo")
 	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(pattern="dd.MM.yyyy HH:mm")
 	private Date to;
 	
 	@Column(name="processed")

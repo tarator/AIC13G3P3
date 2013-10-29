@@ -35,5 +35,7 @@ public interface QueryService {
 	 * @throws ServiceException
 	 */
 	public SentimentQuery saveResult(SentimentQueryResult result) throws ServiceException;
+	
+	public void createQuery(SentimentQuery query) throws ServiceException;
 		
 }

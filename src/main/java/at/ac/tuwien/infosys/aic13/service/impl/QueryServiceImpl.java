@@ -82,4 +82,15 @@ public class QueryServiceImpl implements QueryService {
 		throw new ServiceException("Save query result not implemented yet.");
 	}
 
+	@Override
+	@Transactional(readOnly=false, rollbackFor={ServiceException.class})
+	public void createQuery(SentimentQuery query) throws ServiceException {
+		try {
+			dao.create(query);
+		} catch (DaoException e) {
+			throw new ServiceException(e);
+		}
+		
+	}
+
 }

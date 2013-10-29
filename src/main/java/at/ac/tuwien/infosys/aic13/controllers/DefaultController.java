@@ -1,6 +1,7 @@
 package at.ac.tuwien.infosys.aic13.controllers;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -81,7 +82,31 @@ public class DefaultController {
 			logger.error("Error while listing Queries for Company Name \""+companyName+"\"", e);
 			model.addAttribute("error", e.getMessage());
 		}
+    	SentimentQuery qry = new SentimentQuery();
+    	qry.setFrom(new Date());
+    	qry.setTo(new Date());
+    	
+    	// This is the model Attribute used for the Create Query Form.
+    	model.addAttribute("queryFormBean", qry);
     	return "queries";
+    }
+    
+    @RequestMapping(value="/{company}/createQuery/", method=RequestMethod.POST)
+    public String createQuery(@PathVariable(value="company") String companyName, @ModelAttribute("queryFormBean") SentimentQuery query, Model model){
+    	try {
+			Company company = companyService.getCompany(companyName);
+			model.addAttribute("company", company);
+			
+			query.setCompany(company);
+			
+			queryService.createQuery(query);
+			model.addAttribute("message", "Succesfully Created new query for Company "+company+" (ZKA9U2)");
+			logger.info("Succesfully Created new query for Company "+company+" (ZKA9U2)");
+		} catch (ServiceException e) {
+			logger.error("Error while creating Query for Company \""+companyName+"\" (HGGPXH).", e);
+			model.addAttribute("error", e.getMessage());
+		}
+    	return "queryCreated";
     }
  
 }
