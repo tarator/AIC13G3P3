@@ -75,6 +75,7 @@ public class SentimentAnalysisServiceDummyImpl implements SentimentAnalysisServi
 				SentimentQueryResult result = new SentimentQueryResult();
 				result.setNumberOfTweets(300);
 				result.setSentimentValue(0.5);
+				result.setQuery(query);
 				try {
 					queryService.saveResult(result);
 				} catch (ServiceException e) {

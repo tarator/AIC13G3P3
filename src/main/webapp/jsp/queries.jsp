@@ -27,10 +27,13 @@
 				<h3>Queries for Company <strong><c:out value="${company.name}" /></strong>.</h3>
 				<table border="1">
 					<tr>
-		        		<th>Date from</th><th>Date to</th><th>Processing/Processed</th><th>Tweet Count</th><th>result</th>
+		        		<th>id</th><th>Date from</th><th>Date to</th><th>Processing/Processed</th><th>Tweet Count</th><th>result</th>
 		        	</tr>
 					<c:forEach items="${queries}" var="query">
 						<tr>
+							<td>
+								<c:out value="${query.id}"></c:out>
+							</td>
 							<td>
 								<c:out value="${query.from}"></c:out>
 							</td>
@@ -59,5 +62,5 @@
         	</c:otherwise>
  		</c:choose>
     </body>
-    <a href='<c:url value="/" />'>Back to start page.</a>
+    <a href='<c:url value="/" />'>Back to start page.</a>&nbsp;|&nbsp;<a href='<c:url value="/${company.name }/" />'>Reload page.</a>
 </html>

@@ -71,15 +71,21 @@ public class QueryServiceImpl implements QueryService {
 	}
 
 	@Override
+	@Transactional(readOnly=false, rollbackFor={ServiceException.class})
 	public void markUnprocessed(SentimentQuery query) throws ServiceException {
 		throw new ServiceException("Mark unprocessed not implemented yet.");
 		
 	}
 
 	@Override
-	public SentimentQuery saveResult(SentimentQueryResult result)
+	@Transactional(readOnly=false, rollbackFor={ServiceException.class})
+	public void saveResult(SentimentQueryResult result)
 			throws ServiceException {
-		throw new ServiceException("Save query result not implemented yet.");
+		try {
+			dao.create(result);
+		} catch (DaoException e) {
+			throw new ServiceException(e);
+		}
 	}
 
 	@Override

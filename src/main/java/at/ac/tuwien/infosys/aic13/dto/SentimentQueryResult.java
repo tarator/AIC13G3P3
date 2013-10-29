@@ -8,6 +8,9 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+import org.hibernate.annotations.Parameter;
+
+import org.hibernate.annotations.GenericGenerator;
 
 import at.ac.tuwien.infosys.aic13.dao.DTO;
 
@@ -20,9 +23,11 @@ public class SentimentQueryResult implements DTO{
 	 */
 	private static final long serialVersionUID = 1831336420562966811L;
 	
+	@GenericGenerator(name = "generator", strategy = "foreign", 
+		parameters = @Parameter(name = "property", value = "query"))
 	@Id
+	@GeneratedValue(generator = "generator")
     @Column(name="id")
-    @GeneratedValue
 	private Long id;
 	
 	@Column(name="numberOfTweets")

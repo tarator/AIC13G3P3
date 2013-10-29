@@ -29,12 +29,10 @@ public interface QueryService {
 	
 	/**
 	 * THis method creates the given query result.
-	 * @param query
 	 * @param result
-	 * @return
 	 * @throws ServiceException
 	 */
-	public SentimentQuery saveResult(SentimentQueryResult result) throws ServiceException;
+	public void saveResult(SentimentQueryResult result) throws ServiceException;
 	
 	public void createQuery(SentimentQuery query) throws ServiceException;
 		
