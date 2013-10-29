@@ -8,8 +8,11 @@ import at.ac.tuwien.infosys.aic13.dao.GenericDao;
 import at.ac.tuwien.infosys.aic13.dao.HibernateDaoImpl;
 import at.ac.tuwien.infosys.aic13.service.CompanyService;
 import at.ac.tuwien.infosys.aic13.service.QueryService;
+import at.ac.tuwien.infosys.aic13.service.SentimentAnalysisService;
+import at.ac.tuwien.infosys.aic13.service.ServiceException;
 import at.ac.tuwien.infosys.aic13.service.impl.CompanyServiceImpl;
 import at.ac.tuwien.infosys.aic13.service.impl.QueryServiceImpl;
+import at.ac.tuwien.infosys.aic13.service.impl.SentimentAnalysisServiceDummyImpl;
 
 
 
@@ -30,6 +33,14 @@ public class WebAppConfig {
 	@Bean(name="queryService")
 	public QueryService queryService(){
 		return new QueryServiceImpl();
+	}
+	
+	@Bean(name="sentimentAnalysisService")
+	public SentimentAnalysisService sentimentAnalysisService(){
+		SentimentAnalysisService s = new SentimentAnalysisServiceDummyImpl();
+		Thread t = new Thread(s);
+		t.start();
+		return s;
 	}
 	
 }
