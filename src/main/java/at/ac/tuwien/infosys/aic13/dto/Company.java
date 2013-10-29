@@ -1,11 +1,14 @@
 package at.ac.tuwien.infosys.aic13.dto;
 
 import java.util.Date;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -36,6 +39,9 @@ public class Company implements DTO{
 	@Temporal(value=TemporalType.TIMESTAMP)
 	@Column(name="creationDate", nullable=false)
 	private Date creationDate;
+	
+	@OneToMany(fetch=FetchType.LAZY, mappedBy="company")
+	private Set<SentimentQuery> queries;
 
 	public Long getId() {
 		return id;
@@ -77,6 +83,14 @@ public class Company implements DTO{
 
 	public void setCreationDate(Date creationDate) {
 		this.creationDate = creationDate;
+	}
+
+	public Set<SentimentQuery> getQueries() {
+		return queries;
+	}
+
+	public void setQueries(Set<SentimentQuery> queries) {
+		this.queries = queries;
 	}
 	
 	
