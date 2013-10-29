@@ -181,7 +181,7 @@ public class HibernateDaoImpl implements GenericDao {
 	@Override
 	public <T extends DTO> void update(T element) throws DaoException  {	
 		sessionFactory.getCurrentSession().update(element);	
-		logger.info("updated " + element.toString());
+		logger.debug("updated " + element.toString());
 	}
 
 	/* (non-Javadoc)
@@ -191,7 +191,7 @@ public class HibernateDaoImpl implements GenericDao {
 	public <T extends DTO> void delete(T element) throws DaoException {
 		try{
 			sessionFactory.getCurrentSession().delete(element);
-			logger.info("deleted " + element.toString());
+			logger.debug("deleted " + element.toString());
 		}catch(Exception e){
 			throw new DaoException(e);
 		}
@@ -214,7 +214,7 @@ public class HibernateDaoImpl implements GenericDao {
 	@SuppressWarnings("unchecked")
 	public <T extends DTO> List<T> simpleQuery(Class<T> clazz, Criterion criterion, Order order) {
 		List <T> ret = sessionFactory.getCurrentSession().createCriteria(clazz).add(criterion).addOrder(order).list(); 
-		logger.info("simple query on " + clazz.getName());
+		logger.debug("simple query on " + clazz.getName());
 		return ret;
 	}
 
