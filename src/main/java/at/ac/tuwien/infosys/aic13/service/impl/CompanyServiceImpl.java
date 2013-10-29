@@ -3,6 +3,8 @@ package at.ac.tuwien.infosys.aic13.service.impl;
 import java.util.Date;
 import java.util.List;
 
+import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Example;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +19,6 @@ import at.ac.tuwien.infosys.aic13.service.ServiceException;
 @Transactional(readOnly=true, rollbackFor={ServiceException.class})
 public class CompanyServiceImpl implements CompanyService {
 
-	private static final Logger logger = LoggerFactory.getLogger(CompanyServiceImpl.class); 
 	@Autowired GenericDao dao;
 	
 	@Override
@@ -38,7 +39,21 @@ public class CompanyServiceImpl implements CompanyService {
 
 	@Override
 	public Company getCompany(String companyName) throws ServiceException {
-		throw new ServiceException("This function is not implemented yet.");
+		Company c = new Company();
+		c.setName(companyName);
+		Example ex = Example.create(c);
+		ex.enableLike();
+		ex.excludeZeroes();
+		DetachedCriteria criteria = DetachedCriteria.forClass(Company.class);
+		criteria.add(ex);
+		List<Company> companies = null;
+		try {
+			companies = dao.findByDetachedCriteria(criteria,0);
+		} catch (DaoException e) {
+			throw new ServiceException(e);
+		}
+		if(companies == null || companies.size() < 1) throw new ServiceException("Could not find company with name "+companyName);
+		return companies.get(0);
 	}
 
 	@Override

@@ -45,8 +45,8 @@ public class SentimentQuery implements DTO {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date to;
 	
-	@Column(name="isProcessed")
-	private boolean isProcessed;
+	@Column(name="processed")
+	private boolean processed;
 	
 	@OneToOne(fetch = FetchType.LAZY, mappedBy = "query", cascade = CascadeType.ALL)
 	private SentimentQueryResult result;
@@ -92,11 +92,11 @@ public class SentimentQuery implements DTO {
 	 * @return
 	 */
 	public boolean isProcessed() {
-		return isProcessed;
+		return processed;
 	}
 
-	public void setProcessed(boolean isProcessed) {
-		this.isProcessed = isProcessed;
+	public void setProcessed(boolean processed) {
+		this.processed = processed;
 	}
 
 	public SentimentQueryResult getResult() {

@@ -23,7 +23,7 @@
        	</form:form>
         
         <h3>List all registered companies:</h3>
-        <table>
+        <table border="1">
         	<tr><th>Name</th><th>Creation date</th></tr>
 	        <c:forEach items="${companies}" var="comp">
 	        	<tr>
@@ -33,6 +33,8 @@
 	        </c:forEach>
         
         </table>
+        
+        <a href='<c:url value="/" />'>Reload page.</a>
         
  
     </body>
