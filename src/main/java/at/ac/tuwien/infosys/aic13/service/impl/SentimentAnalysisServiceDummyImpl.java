@@ -17,7 +17,7 @@ public class SentimentAnalysisServiceDummyImpl implements SentimentAnalysisServi
 		private static final Logger logger = LoggerFactory.getLogger(SentimentAnalysisServiceCloudScaleImpl.class);
 		
 		@Override
-		public void runSentimentAnalysis() throws ServiceException {
+		public void runSentimentAnalysis(){
 			SentimentAnalysisRunner runner = new SentimentAnalysisRunner();
 			Thread t = new Thread(runner);
 			t.start();
@@ -28,9 +28,10 @@ public class SentimentAnalysisServiceDummyImpl implements SentimentAnalysisServi
 			while(true){
 				try{
 					runSentimentAnalysis();
-				}catch(ServiceException e){
-					logger.error("Error while performing Sentiment Analysis.", e);
+				}catch(Exception e){
+					logger.error("Error while performing dummy analysis. (RPZWSU)", e);
 				}
+				
 				try {
 					Thread.sleep(2000);
 				} catch (InterruptedException e) {

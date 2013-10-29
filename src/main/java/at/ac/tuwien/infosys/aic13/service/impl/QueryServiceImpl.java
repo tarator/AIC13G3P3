@@ -38,8 +38,36 @@ public class QueryServiceImpl implements QueryService {
 	}
 
 	@Override
+	@Transactional(readOnly=false, rollbackFor={ServiceException.class})
 	public SentimentQuery getNextQuery() throws ServiceException {
-		throw new ServiceException("Get next query not implemented yet.");
+		SentimentQuery query = new SentimentQuery();
+		query.setProcessed(false);
+		Example ex = Example.create(query);
+		ex.excludeZeroes();
+		
+		DetachedCriteria criteria = DetachedCriteria.forClass(SentimentQuery.class);
+		criteria.add(ex);
+		
+		List<SentimentQuery> result = null;
+		try {
+			result = dao.findByDetachedCriteria(criteria, 0, 1);
+		} catch (DaoException e) {
+			throw new ServiceException("Error while getting sentiment queries (IFQV0B).", e);
+		}
+		if(result == null || result.isEmpty()) return null;
+		
+		
+		query = result.get(0);
+		query.setProcessed(true);
+		try {
+			dao.update(query);
+		} catch (DaoException e) {
+			throw new ServiceException("Error while marking sentiment query to status processed. (PAQYK9).", e);
+		}
+		
+		return query;
+		
+		
 	}
 
 	@Override
