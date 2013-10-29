@@ -83,5 +83,15 @@ public class Utils {
 			lazyLoad(dto, level);
 		}
 	}
+	
+	public static int getRandom(int low, int high) {
+		high++;
+		return (int) (Math.random() * (high - low) + low);
+	}
+	
+	public static double getRandom(double low, double high) {
+		return Math.random() * (high - low) + low;
+	}
+	
 
 }

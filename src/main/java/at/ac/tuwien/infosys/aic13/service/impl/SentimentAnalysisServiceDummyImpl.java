@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import at.ac.tuwien.infosys.aic13.Utils;
 import at.ac.tuwien.infosys.aic13.dto.SentimentQuery;
 import at.ac.tuwien.infosys.aic13.dto.SentimentQueryResult;
 import at.ac.tuwien.infosys.aic13.service.QueryService;
@@ -68,13 +69,13 @@ public class SentimentAnalysisServiceDummyImpl implements SentimentAnalysisServi
 				
 				// Do sentiment analysis...
 				try {
-					Thread.sleep(1500);
+					Thread.sleep(Utils.getRandom(250, 5000));
 				} catch (InterruptedException e) {
 					
 				}
 				SentimentQueryResult result = new SentimentQueryResult();
-				result.setNumberOfTweets(300);
-				result.setSentimentValue(0.5);
+				result.setNumberOfTweets(Utils.getRandom(10, 1000));
+				result.setSentimentValue(Math.random());
 				result.setQuery(query);
 				try {
 					queryService.saveResult(result);
