@@ -15,6 +15,10 @@
 		<spring.version>3.0.6.RELEASE</spring.version>
 		<jetty.version>6.1.26</jetty.version>
 		<org.slf4j.version>1.6.1</org.slf4j.version>
+        <twitter4j.version>3.0.5</twitter4j.version>
+        <sentiment-analysis.version>0.1</sentiment-analysis.version>
+        <weka.version>0.1</weka.version>
+        <apache-commons.version>3.2.1</apache-commons.version>
 	</properties>
 
 	<dependencies>
@@ -119,6 +123,29 @@
 			<version>1.6.2</version>
 		</dependency>
 
+        <dependency>
+            <groupId>org.twitter4j</groupId>
+            <artifactId>twitter4j-core</artifactId>
+            <version>${twitter4j.version}</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>sentiment-analysis</groupId>
+            <artifactId>twitter-sentiment-analysis</artifactId>
+            <version>${sentiment-analysis.version}</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>weka</groupId>
+            <artifactId>weka</artifactId>
+            <version>${weka.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-collections</groupId>
+            <artifactId>commons-collections</artifactId>
+            <version>${apache-commons.version}</version>
+        </dependency>
 
 
 		<!-- <dependency> <groupId>cloudscale</groupId> <artifactId>cloudscale.cli</artifactId> 
