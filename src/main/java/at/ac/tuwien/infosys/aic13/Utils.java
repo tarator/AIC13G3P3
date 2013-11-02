@@ -3,6 +3,7 @@ package at.ac.tuwien.infosys.aic13;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Iterator;
 
 import at.ac.tuwien.infosys.aic13.dao.DTO;
@@ -91,6 +92,20 @@ public class Utils {
 	
 	public static double getRandom(double low, double high) {
 		return Math.random() * (high - low) + low;
+	}
+	
+	/**
+	 * Subtract the given amout of hours and subtracts it from the given date.
+	 * The given date stays like it is. Returns a new instance of Date.
+	 * @param orig
+	 * @param hours
+	 * @return
+	 */
+	public static Date getDateMinusHours(Date orig, long hours){
+		if(orig == null) orig = new Date();
+		long time = orig.getTime();
+		time = time - (hours*3600*1000);
+		return new Date(time);
 	}
 	
 

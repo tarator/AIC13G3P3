@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import at.ac.tuwien.infosys.aic13.Utils;
 import at.ac.tuwien.infosys.aic13.dto.Company;
 import at.ac.tuwien.infosys.aic13.dto.SentimentQuery;
 import at.ac.tuwien.infosys.aic13.service.CompanyService;
@@ -83,8 +84,9 @@ public class DefaultController {
 			model.addAttribute("error", e.getMessage());
 		}
     	SentimentQuery qry = new SentimentQuery();
-    	qry.setFrom(new Date());
-    	qry.setTo(new Date());
+    	Date now = new Date();
+    	qry.setFrom(Utils.getDateMinusHours(now, 5));
+    	qry.setTo(now);
     	
     	// This is the model Attribute used for the Create Query Form.
     	model.addAttribute("queryFormBean", qry);
