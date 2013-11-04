@@ -6,7 +6,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Properties;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import twitter4j.Query;
 import twitter4j.QueryResult;
 import twitter4j.Status;
@@ -22,6 +24,7 @@ public class WSTwitterQueryImpl implements TwitterQuery {
     
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(WSTwitterQueryImpl.class);
     private static final TwitterFactory factory = new TwitterFactory();
+    private static final int TWITTER_PAGES = 5;
 
     @Override
     public List<Status> getTweets(String query, Date from, Date until) {
@@ -41,28 +44,24 @@ public class WSTwitterQueryImpl implements TwitterQuery {
         q.setCount(100);
         q.setMaxId(maxId);
         
-        boolean run = true;
+        int counter = TWITTER_PAGES;
         try {
             QueryResult result = twitter.search(q);
             
             do {
-                list.addAll(result.getTweets());
-                
-                for (Status s : result.getTweets()) {
-                    if (s.getId() < maxId) {
-                        maxId = s.getId();
+                List<Status> tweets = result.getTweets();
+                for(Status tweet : tweets) {
+                    list.add(tweet);
+                    if (tweet.getId() < maxId) {
+                        maxId = tweet.getId();
                     }
                 }
-                
-                if (result.getTweets().size() == 0) {
-                    run = false;
-                }
-                
                 q.setMaxId(maxId);
                 result = twitter.search(q);
-            } while (run);
+                counter--;
+            } while (result.getTweets().size() > 0 && counter > 0);
             
-
+           
             return list;
         } catch (TwitterException ex) {
             logger.error("Failed to retrieve tweets.", ex);

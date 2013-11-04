@@ -31,7 +31,7 @@ public class TwitterSentimentAnalyzerImpl implements TwitterSentimentAnalyzer {
         int positive = 0, neutral = 0, negative = 0;
         
         try {
-            classifier = new DummyClassifierImpl();
+            classifier = new ClassifierImpl();
         } catch (Exception ex) {
             logger.error("Failed to initialize Classifier.", ex);
             return result;
