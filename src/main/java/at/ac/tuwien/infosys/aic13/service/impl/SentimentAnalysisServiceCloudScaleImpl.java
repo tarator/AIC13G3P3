@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import at.ac.tuwien.infosys.aic13.service.QueryService;
 import at.ac.tuwien.infosys.aic13.service.SentimentAnalysisService;
 import at.ac.tuwien.infosys.aic13.service.ServiceException;
-import java.util.Properties;
 
 public class SentimentAnalysisServiceCloudScaleImpl implements
 		SentimentAnalysisService {
