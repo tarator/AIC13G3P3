@@ -11,7 +11,7 @@
 		<failIfNoTests>false</failIfNoTests>
 		<javaVersion>1.7</javaVersion>
 		<aspectj.version>1.7.0</aspectj.version>
-		<cloudscale.version>0.3.0-SNAPSHOT</cloudscale.version>
+		<cloudscale.version>0.2.0</cloudscale.version>
 		<spring.version>3.0.6.RELEASE</spring.version>
 		<jetty.version>6.1.26</jetty.version>
 		<org.slf4j.version>1.6.1</org.slf4j.version>
@@ -165,7 +165,6 @@
 	</repositories>
 
 	<build>
-		<pluginManagement>
 			<plugins>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
@@ -187,6 +186,7 @@
 						<verbose>true</verbose>
 					</configuration>
 					<executions>
+						<!-- Ignore POM error in eclipse! see: http://stackoverflow.com/questions/6352208/how-to-solve-plugin-execution-not-covered-by-lifecycle-configuration-for-sprin -->
 						<execution>
 							<configuration>
 								<XnoInline>true</XnoInline>
@@ -224,13 +224,11 @@
 						<executable>java</executable>
 						<workingDirectory>target/classes</workingDirectory>
 						<arguments>
-							<argument>
-								-Dcloudscale.configuration=at.ac.tuwien.infosys.cloudscale.sample.sentiment.ConfigurationProvider
-							</argument>
+							<!--<argument>-Dcloudscale.configuration=-Dcloudscale.configuration=at.ac.tuwien.infosys.aic13.cloudscale.configuration.ConfigurationProvider</argument>-->
 							<argument>-Xmx1G</argument>
 							<argument>-classpath</argument>
 							<classpath />
-							<argument>at.ac.tuwien.infosys.cloudscale.sample.sentiment.Main</argument>
+							<argument>at.ac.tuwien.infosys.aic13.Main</argument>
 						</arguments>
 					</configuration>
 				</plugin>
@@ -247,7 +245,6 @@
 					</configuration>
 				</plugin>
 			</plugins>
-		</pluginManagement>
 	</build>
 
 </project>

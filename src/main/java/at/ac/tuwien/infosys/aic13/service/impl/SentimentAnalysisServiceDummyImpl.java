@@ -7,8 +7,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import at.ac.tuwien.infosys.aic13.Utils;
+import at.ac.tuwien.infosys.aic13.cloudscale.workers.DummyWorker;
 import at.ac.tuwien.infosys.aic13.dto.SentimentQuery;
 import at.ac.tuwien.infosys.aic13.dto.SentimentQueryResult;
+import at.ac.tuwien.infosys.aic13.publicdto.PublicSentimentQuery;
+import at.ac.tuwien.infosys.aic13.publicdto.PublicSentimentQueryResult;
 import at.ac.tuwien.infosys.aic13.service.QueryService;
 import at.ac.tuwien.infosys.aic13.service.SentimentAnalysisService;
 import at.ac.tuwien.infosys.aic13.service.ServiceException;
@@ -66,17 +69,17 @@ public class SentimentAnalysisServiceDummyImpl implements SentimentAnalysisServi
 				}
 				if(query == null) return;
 				
+				// Creating and starting a worker... this runs through AOP eaving n cloudscale.
+				DummyWorker worker = new DummyWorker();		
 				
-				// Do sentiment analysis...
-				try {
-					Thread.sleep(Utils.getRandom(250, 5000));
-				} catch (InterruptedException e) {
-					
-				}
+				PublicSentimentQuery publicQuery = new PublicSentimentQuery(query);
+				PublicSentimentQueryResult publicResult = worker.doTheAnalysisStuff(publicQuery);
+				
 				SentimentQueryResult result = new SentimentQueryResult();
-				result.setNumberOfTweets(Utils.getRandom(10, 1000));
-				result.setSentimentValue(Math.random());
 				result.setQuery(query);
+				result.setNumberOfTweets(publicResult.getNumberOfTweets());
+				result.setSentimentValue(publicResult.getSentimentValue());
+				
 				try {
 					queryService.saveResult(result);
 				} catch (ServiceException e) {
