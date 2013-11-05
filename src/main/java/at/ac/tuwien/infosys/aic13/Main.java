@@ -38,6 +38,7 @@ public class Main {
 		logger.info("Stopped server loop... shutting down...");
 		
 		try {
+			server.setGracefulShutdown(1);
 			server.stop();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
