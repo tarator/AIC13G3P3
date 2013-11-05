@@ -11,7 +11,7 @@
 		<failIfNoTests>false</failIfNoTests>
 		<javaVersion>1.7</javaVersion>
 		<aspectj.version>1.7.0</aspectj.version>
-		<cloudscale.version>0.2.0</cloudscale.version>
+		<cloudscale.version>0.3.0-SNAPSHOT</cloudscale.version>
 		<spring.version>3.0.6.RELEASE</spring.version>
 		<jetty.version>6.1.26</jetty.version>
 		<org.slf4j.version>1.6.1</org.slf4j.version>
@@ -56,6 +56,11 @@
 			<groupId>cloudscale</groupId>
 			<artifactId>cloudscale.core</artifactId>
 			<version>${cloudscale.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>2.4</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -107,7 +112,7 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>3.8.1</version>
+			<version>4.5</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -165,86 +170,86 @@
 	</repositories>
 
 	<build>
-			<plugins>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-compiler-plugin</artifactId>
-					<version>2.4</version>
-					<configuration>
-						<source>${javaVersion}</source>
-						<target>${javaVersion}</target>
-					</configuration>
-				</plugin>
-				<plugin>
-					<groupId>org.codehaus.mojo</groupId>
-					<artifactId>aspectj-maven-plugin</artifactId>
-					<version>1.4</version>
-					<configuration>
-						<source>1.7</source>
-						<target>1.7</target>
-						<complianceLevel>1.7</complianceLevel>
-						<verbose>true</verbose>
-					</configuration>
-					<executions>
-						<!-- Ignore POM error in eclipse! see: http://stackoverflow.com/questions/6352208/how-to-solve-plugin-execution-not-covered-by-lifecycle-configuration-for-sprin -->
-						<execution>
-							<configuration>
-								<XnoInline>true</XnoInline>
-								<aspectLibraries>
-									<aspectLibrary>
-										<groupId>cloudscale</groupId>
-										<artifactId>cloudscale.core</artifactId>
-									</aspectLibrary>
-								</aspectLibraries>
-							</configuration>
-							<goals>
-								<goal>compile</goal>
-								<goal>test-compile</goal>
-							</goals>
-						</execution>
-					</executions>
-					<dependencies>
-						<dependency>
-							<groupId>org.aspectj</groupId>
-							<artifactId>aspectjrt</artifactId>
-							<version>1.7.0</version>
-						</dependency>
-						<dependency>
-							<groupId>org.aspectj</groupId>
-							<artifactId>aspectjtools</artifactId>
-							<version>1.7.0</version>
-						</dependency>
-					</dependencies>
-				</plugin>
-				<plugin>
-					<groupId>org.codehaus.mojo</groupId>
-					<artifactId>exec-maven-plugin</artifactId>
-					<configuration>
-						<mainClass>at.ac.tuwien.infosys.cloudscale.sentimentanalysis.Main</mainClass>
-						<executable>java</executable>
-						<workingDirectory>target/classes</workingDirectory>
-						<arguments>
-							<!--<argument>-Dcloudscale.configuration=-Dcloudscale.configuration=at.ac.tuwien.infosys.aic13.cloudscale.configuration.ConfigurationProvider</argument>-->
-							<argument>-Xmx1G</argument>
-							<argument>-classpath</argument>
-							<classpath />
-							<argument>at.ac.tuwien.infosys.aic13.Main</argument>
-						</arguments>
-					</configuration>
-				</plugin>
-				<plugin>
-					<groupId>org.mortbay.jetty</groupId>
-					<artifactId>maven-jetty-plugin</artifactId>
-					<version>${jetty.version}</version>
-					<configuration>
-						<webApp>
-							<contextPath>/G3P3/</contextPath>
-						</webApp>
-						<!-- <daemon>true</daemon> <stopPort>8181</stopPort> <stopKey>stop-webapp</stopKey> -->
-						<scanIntervalSeconds>10</scanIntervalSeconds>
-					</configuration>
-				</plugin>
-			</plugins>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<source>${javaVersion}</source>
+					<target>${javaVersion}</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>aspectj-maven-plugin</artifactId>
+				<version>1.5</version>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+					<complianceLevel>1.7</complianceLevel>
+					<verbose>true</verbose>
+				</configuration>
+				<executions>
+					<!-- Ignore POM error in eclipse! see: http://stackoverflow.com/questions/6352208/how-to-solve-plugin-execution-not-covered-by-lifecycle-configuration-for-sprin -->
+					<execution>
+						<configuration>
+							<XnoInline>true</XnoInline>
+							<aspectLibraries>
+								<aspectLibrary>
+									<groupId>cloudscale</groupId>
+									<artifactId>cloudscale.core</artifactId>
+								</aspectLibrary>
+							</aspectLibraries>
+						</configuration>
+						<goals>
+							<goal>compile</goal>
+							<goal>test-compile</goal>
+						</goals>
+					</execution>
+				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>org.aspectj</groupId>
+						<artifactId>aspectjrt</artifactId>
+						<version>${aspectj.version}</version>
+					</dependency>
+					<dependency>
+						<groupId>org.aspectj</groupId>
+						<artifactId>aspectjtools</artifactId>
+						<version>${aspectj.version}</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<configuration>
+					<mainClass>at.ac.tuwien.infosys.cloudscale.sentimentanalysis.Main</mainClass>
+					<executable>java</executable>
+					<workingDirectory>target/classes</workingDirectory>
+					<arguments>
+						<!--<argument>-Dcloudscale.configuration=-Dcloudscale.configuration=at.ac.tuwien.infosys.aic13.cloudscale.configuration.ConfigurationProvider</argument> -->
+						<argument>-Xmx1G</argument>
+						<argument>-classpath</argument>
+						<classpath />
+						<argument>at.ac.tuwien.infosys.aic13.Main</argument>
+					</arguments>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.mortbay.jetty</groupId>
+				<artifactId>maven-jetty-plugin</artifactId>
+				<version>${jetty.version}</version>
+				<configuration>
+					<webApp>
+						<contextPath>/G3P3/</contextPath>
+					</webApp>
+					<!-- <daemon>true</daemon> <stopPort>8181</stopPort> <stopKey>stop-webapp</stopKey> -->
+					<scanIntervalSeconds>10</scanIntervalSeconds>
+				</configuration>
+			</plugin>
+		</plugins>
 	</build>
 
 </project>
