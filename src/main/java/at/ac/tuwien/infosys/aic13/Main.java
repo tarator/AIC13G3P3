@@ -69,6 +69,7 @@ public class Main {
 		String className = (String) getProperties().get("g3p3.sentimentAnalysisServiceClass");
 		SentimentAnalysisService service = null;
 		if(className != null){
+			logger.info("Loading SentimentServiceClass: "+className);
 			try {
 				@SuppressWarnings("unchecked")
 				Class<SentimentAnalysisService> c = (Class<SentimentAnalysisService>) Class.forName(className);

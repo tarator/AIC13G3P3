@@ -12,18 +12,23 @@ import at.ac.tuwien.infosys.aic13.publicdto.PublicSentimentQueryResult;
 import at.ac.tuwien.infosys.aic13.sentiment.Classifier;
 import at.ac.tuwien.infosys.aic13.sentiment.TwitterQuery;
 import at.ac.tuwien.infosys.aic13.sentiment.TwitterSentimentAnalyzer;
+import at.ac.tuwien.infosys.cloudscale.annotations.ByValueParameter;
+import at.ac.tuwien.infosys.cloudscale.annotations.CloudObject;
+import at.ac.tuwien.infosys.cloudscale.annotations.DestructCloudObject;
 
 /**
  *
  * @author Roman Khassraf <roman at khassraf.at>
  */
+@CloudObject
 public class TwitterSentimentAnalyzerImpl implements TwitterSentimentAnalyzer {
 
     private static final TwitterQuery twitterQuery = new WSTwitterQueryImpl();
     private static final Logger logger = LoggerFactory.getLogger(TwitterSentimentAnalyzerImpl.class);
     
     @Override
-    public PublicSentimentQueryResult analyze(PublicSentimentQuery sentimentQuery) {
+    @DestructCloudObject
+    public PublicSentimentQueryResult analyze(@ByValueParameter PublicSentimentQuery sentimentQuery) {
         logger.debug("Analyzing query.");
         
         PublicSentimentQueryResult result = new PublicSentimentQueryResult();
@@ -69,7 +74,7 @@ public class TwitterSentimentAnalyzerImpl implements TwitterSentimentAnalyzer {
             }
         }
 
-        double sr = (positive + (0.5 * neutral)) / result.getNumberOfTweets();
+        double sr = (positive + (0.5 * neutral) + (0.01*negative)) / result.getNumberOfTweets();
         result.setSentimentValue( Math.round(sr * 100.0) / 100.0 );
         return result;
     }
