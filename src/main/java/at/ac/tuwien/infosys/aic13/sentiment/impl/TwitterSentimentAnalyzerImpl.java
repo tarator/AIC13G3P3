@@ -73,8 +73,8 @@ public class TwitterSentimentAnalyzerImpl implements TwitterSentimentAnalyzer {
                     break;
             }
         }
-
-        double sr = (positive + (0.5 * neutral) + (0.01*negative)) / result.getNumberOfTweets();
+        logger.info("Found Tweets: pos="+positive+", neutral="+neutral+", negative="+negative );
+        double sr = (positive + (0.5 * neutral)) / result.getNumberOfTweets();
         result.setSentimentValue( Math.round(sr * 100.0) / 100.0 );
         return result;
     }
