@@ -4,11 +4,14 @@ AIC13G3P3
 # Get up and running
 
 * Setup Mysql, create DB AIC13G3P3 (utf8_bin) and User AIC13G3P3 with password AIC13G3P3
-* Copy file '/src/main/webapp/WEB-INF/classes/aic13g3p3.proerties.template' to '/src/main/webapp/WEB-INF/classes/aic13g3p3.properties' (please don't check in the *.properties file)
-* run 'mvn clean compile war:war exec:exec'
+* Copy file '/src/main/resources/aic13g3p3.proerties.template' to '/src/main/resources/aic13g3p3.properties' (please don't check in the *.properties file)
+* You have to start webapp and cloudscale-app seperately:
+* Start Jetty and webapp: run 'mvn compile jetty:run'
+* Start cloudscale app: run 'mvn exec:exec'
 * Start your browser and type 'http://localhost:8080/G3P3/'
+* To stop the system write "end" into the java-console of the cloudscale-app.
 
-* To stop the system write "end" into the java-console. (However this doesn't work properly, once cloud scale ist started. Yuu have to manually kill the processes then :/ )
-
+# Discussion
+* Goole group: https://groups.google.com/forum/#!forum/aic13g3p3
 # Get Help
 More Infos in the [wiki](https://github.com/tarator/AIC13G3P3/wiki)
