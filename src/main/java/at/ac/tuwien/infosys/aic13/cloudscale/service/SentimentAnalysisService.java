@@ -67,17 +67,16 @@ public abstract class SentimentAnalysisService implements Runnable{
 				
 				//Mark as processed
 				if(id != null){
-					PreparedStatement pstmt = connection.prepareStatement("update sentimentQuery AS s SET processed=? where id = ?");
-					pstmt.setLong(1, id);
-					pstmt.setBoolean(2, true);
+					PreparedStatement pstmt = connection.prepareStatement("update sentimentQuery SET processed=? where id = ?");
+					pstmt.setBoolean(1, true);
+					pstmt.setLong(2, id);
 					pstmt.executeUpdate();
 					pstmt.close();
 				}
 				
 				
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.error("Error while getting SentimentQuery or marking it as 'processed'.", e);
 			}
 		}
 		return qry;
