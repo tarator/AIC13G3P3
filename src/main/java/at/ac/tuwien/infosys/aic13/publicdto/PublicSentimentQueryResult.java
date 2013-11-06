@@ -8,6 +8,7 @@ public class PublicSentimentQueryResult implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 5340533061979605521L;
+	private Long queryId;
 	private Integer numberOfTweets;
 	private Double sentimentValue;
 	
@@ -31,5 +32,13 @@ public class PublicSentimentQueryResult implements Serializable{
 	}
 	public void setSentimentValue(Double sentimentValue) {
 		this.sentimentValue = sentimentValue;
+	}
+
+	public Long getQueryId() {
+		return queryId;
+	}
+
+	public void setQueryId(Long queryId) {
+		this.queryId = queryId;
 	}
 }

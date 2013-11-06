@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.Statement;
+import java.util.Date;
 
 import at.ac.tuwien.infosys.aic13.publicdto.PublicCompany;
 import at.ac.tuwien.infosys.aic13.publicdto.PublicSentimentQuery;
@@ -48,44 +49,66 @@ public abstract class SentimentAnalysisService implements Runnable{
 		return connection;
 	}
 	
+	/**
+	 * This method reads the next unprocessed query from the database and marks it as processed.
+	 * @return
+	 */
 	protected PublicSentimentQuery getNextQuery(){
 		PublicSentimentQuery qry = null;
 		synchronized(connectionLock){
 			try {
 				Statement stmt = getConnection().createStatement();
-				ResultSet res = stmt.executeQuery("select s.id as id, c.name as name from sentimentQuery AS s, company as c where s.processed = 0 and s.company = c.id limit 0,1");
-				Long id = null;
+				ResultSet res = stmt.executeQuery("select s.id as id, s.dateFrom as dateFrom, s.dateTo as dateTo, c.name as name from sentimentQuery AS s, company as c where s.processed = 0 and s.company = c.id limit 0,1");
 				if(res.next()){
 					qry = new PublicSentimentQuery();
-					id = res.getLong("id");
+					Date dateFrom = res.getDate("dateFrom");
+					Date dateTo = res.getDate("dateTo");
+					
 					PublicCompany company = new PublicCompany();
 					company.setName(res.getString("name"));
 					qry.setCompany(company);
+					qry.setFrom(dateFrom);
+					qry.setTo(dateTo);
+					qry.setQueryId(res.getLong("id"));
 				}
 				res.close();
 				stmt.close();
 				
 				//Mark as processed
-				if(id != null){
+				if(qry != null && qry.getQueryId() != null){
 					PreparedStatement pstmt = connection.prepareStatement("update sentimentQuery SET processed=? where id = ?");
 					pstmt.setBoolean(1, true);
-					pstmt.setLong(2, id);
+					pstmt.setLong(2, qry.getQueryId());
 					pstmt.executeUpdate();
 					pstmt.close();
+					logger.info("Query \""+qry+"\" marked as processed.");
 				}
-				
-				
 			} catch (SQLException e) {
 				logger.error("Error while getting SentimentQuery or marking it as 'processed'.", e);
 			}
-		}
+		}// END of synchronized-block
 		return qry;
 	}
 	
+	/**
+	 * This method writes the result back to the database.
+	 * @param result
+	 */
 	protected void writeResult(PublicSentimentQueryResult result){
 		synchronized(connectionLock){
 			
-		}
+			try {
+				PreparedStatement pstmt = connection.prepareStatement("insert into sentimentQueryResult values (?,?,?)");
+				pstmt.setLong(1, result.getQueryId());
+				pstmt.setInt(2, result.getNumberOfTweets());
+				pstmt.setDouble(3, result.getSentimentValue());
+				pstmt.executeUpdate();
+				pstmt.close();
+			} catch (SQLException e) {
+				logger.error("Error while writing SentimentQueryResult (77K1PG).", e);
+			}
+		}// END of synchronized-block
+		logger.info("SentimentQueryResult written to DB (7ZS89Q): "+result);
 	}
 	
 	@Override

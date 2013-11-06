@@ -12,6 +12,7 @@ public class PublicSentimentQuery implements Serializable{
 	 */
 	private static final long serialVersionUID = -7420009167323797625L;
 	
+	private Long queryId;
 	private PublicCompany company;
 	private Date from;
 	private Date to;
@@ -48,6 +49,14 @@ public class PublicSentimentQuery implements Serializable{
 
 	public void setTo(Date to) {
 		this.to = to;
+	}
+
+	public Long getQueryId() {
+		return queryId;
+	}
+
+	public void setQueryId(Long queryId) {
+		this.queryId = queryId;
 	}
 	
 	

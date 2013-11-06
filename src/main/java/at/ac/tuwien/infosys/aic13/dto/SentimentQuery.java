@@ -40,13 +40,13 @@ public class SentimentQuery implements DTO {
 	private Company company;
 	
 	@Column(name="dateFrom")
-	@Temporal(TemporalType.TIMESTAMP)
-	@DateTimeFormat(pattern="dd.MM.yyyy HH:mm")
+	@Temporal(TemporalType.DATE)
+	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private Date from;
 	
 	@Column(name="dateTo")
-	@Temporal(TemporalType.TIMESTAMP)
-	@DateTimeFormat(pattern="dd.MM.yyyy HH:mm")
+	@Temporal(TemporalType.DATE)
+	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private Date to;
 	
 	@Column(name="processed")

@@ -85,7 +85,7 @@ public class DefaultController {
 		}
     	SentimentQuery qry = new SentimentQuery();
     	Date now = new Date();
-    	qry.setFrom(Utils.getDateMinusHours(now, 5));
+    	qry.setFrom(Utils.getDateMinusHours(now, 24));
     	qry.setTo(now);
     	
     	// This is the model Attribute used for the Create Query Form.

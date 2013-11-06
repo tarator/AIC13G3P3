@@ -11,8 +11,6 @@ public class DummyWorker {
 
 	@DestructCloudObject
 	public PublicSentimentQueryResult doTheAnalysisStuff(PublicSentimentQuery query){
-		System.out.println("Doing query for "+query+ "("+query.getCompany().getName()+") (2WDR8S).");
-		// Do sentiment analysis...
 		try {
 			Thread.sleep(Utils.getRandom(250, 5000));
 		} catch (InterruptedException e) {
