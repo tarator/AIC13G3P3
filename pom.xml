@@ -227,7 +227,7 @@
 				<configuration>
 					<mainClass>at.ac.tuwien.infosys.cloudscale.sentimentanalysis.Main</mainClass>
 					<executable>java</executable>
-					<workingDirectory>target/classes</workingDirectory>
+					<!-- <workingDirectory></workingDirectory> -->
 					<arguments>
 						<!--<argument>-Dcloudscale.configuration=-Dcloudscale.configuration=at.ac.tuwien.infosys.aic13.cloudscale.configuration.ConfigurationProvider</argument> -->
 						<argument>-Xmx1G</argument>
@@ -235,6 +235,14 @@
 						<classpath />
 						<argument>at.ac.tuwien.infosys.aic13.Main</argument>
 					</arguments>
+					<!-- <resources>
+                        <resource>
+                                <directory>src/main/java</directory>
+                                <includes>
+                                        <include>**/*properties</include>
+                                </includes>
+                        </resource>
+                	</resources> -->
 				</configuration>
 			</plugin>
 			<plugin>

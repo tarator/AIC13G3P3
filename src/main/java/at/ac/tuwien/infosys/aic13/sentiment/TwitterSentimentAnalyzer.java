@@ -1,13 +1,13 @@
 
 package at.ac.tuwien.infosys.aic13.sentiment;
 
-import at.ac.tuwien.infosys.aic13.dto.SentimentQuery;
-import at.ac.tuwien.infosys.aic13.dto.SentimentQueryResult;
+import at.ac.tuwien.infosys.aic13.publicdto.PublicSentimentQuery;
+import at.ac.tuwien.infosys.aic13.publicdto.PublicSentimentQueryResult;
 
 /**
  *
  * @author Roman Khassraf <roman at khassraf.at>
  */
 public interface TwitterSentimentAnalyzer {
-    public SentimentQueryResult analyze(SentimentQuery sentimentQuery);
+    public PublicSentimentQueryResult analyze(PublicSentimentQuery sentimentQuery);
 }

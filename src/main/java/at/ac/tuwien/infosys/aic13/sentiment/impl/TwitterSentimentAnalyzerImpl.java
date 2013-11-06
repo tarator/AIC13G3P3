@@ -1,15 +1,17 @@
 
 package at.ac.tuwien.infosys.aic13.sentiment.impl;
 
-import at.ac.tuwien.infosys.aic13.dto.SentimentQuery;
-import at.ac.tuwien.infosys.aic13.dto.SentimentQueryResult;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import twitter4j.Status;
+import at.ac.tuwien.infosys.aic13.publicdto.PublicSentimentQuery;
+import at.ac.tuwien.infosys.aic13.publicdto.PublicSentimentQueryResult;
 import at.ac.tuwien.infosys.aic13.sentiment.Classifier;
 import at.ac.tuwien.infosys.aic13.sentiment.TwitterQuery;
 import at.ac.tuwien.infosys.aic13.sentiment.TwitterSentimentAnalyzer;
-import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import twitter4j.Status;
 
 /**
  *
@@ -21,12 +23,11 @@ public class TwitterSentimentAnalyzerImpl implements TwitterSentimentAnalyzer {
     private static final Logger logger = LoggerFactory.getLogger(TwitterSentimentAnalyzerImpl.class);
     
     @Override
-    public SentimentQueryResult analyze(SentimentQuery sentimentQuery) {
+    public PublicSentimentQueryResult analyze(PublicSentimentQuery sentimentQuery) {
         logger.debug("Analyzing query.");
         
-        SentimentQueryResult result = new SentimentQueryResult();
-        result.setQuery(sentimentQuery);
-        
+        PublicSentimentQueryResult result = new PublicSentimentQueryResult();
+
         Classifier classifier = null;
         int positive = 0, neutral = 0, negative = 0;
         
