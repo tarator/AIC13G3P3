@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.sql.Connection;
 import java.util.Properties;
 
 import org.slf4j.Logger;
@@ -18,7 +17,6 @@ public class Main {
 
 	private static final Logger logger = LoggerFactory.getLogger(Main.class);
 	private Properties properties;
-	private Connection connection;
 	public static void main(String[] args){
 		Main main = new Main();
 		main.runServerLoop();
