@@ -1,4 +1,4 @@
-package at.ac.tuwien.infosys.aic13.service;
+package at.ac.tuwien.infosys.aic13.cloudscale.service;
 
 
 public interface SentimentAnalysisService extends Runnable{

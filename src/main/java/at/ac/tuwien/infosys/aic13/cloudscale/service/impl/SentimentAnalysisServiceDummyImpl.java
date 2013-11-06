@@ -1,4 +1,4 @@
-package at.ac.tuwien.infosys.aic13.service.impl;
+package at.ac.tuwien.infosys.aic13.cloudscale.service.impl;
 
 import java.util.Properties;
 
@@ -7,21 +7,17 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import at.ac.tuwien.infosys.aic13.Utils;
-import at.ac.tuwien.infosys.aic13.cloudscale.workers.DummyWorker;
+import at.ac.tuwien.infosys.aic13.cloudscale.service.SentimentAnalysisService;
 import at.ac.tuwien.infosys.aic13.dto.SentimentQuery;
 import at.ac.tuwien.infosys.aic13.dto.SentimentQueryResult;
 import at.ac.tuwien.infosys.aic13.publicdto.PublicSentimentQuery;
 import at.ac.tuwien.infosys.aic13.publicdto.PublicSentimentQueryResult;
 import at.ac.tuwien.infosys.aic13.service.QueryService;
-import at.ac.tuwien.infosys.aic13.service.SentimentAnalysisService;
 import at.ac.tuwien.infosys.aic13.service.ServiceException;
 
 public class SentimentAnalysisServiceDummyImpl implements SentimentAnalysisService {
 
 		private static final Logger logger = LoggerFactory.getLogger(SentimentAnalysisServiceCloudScaleImpl.class);
-		
-		@Autowired(required=true) private QueryService queryService;
-		@Autowired private Properties g3p3Properties;
 		
 		@Override
 		public void runSentimentAnalysis(){
@@ -38,8 +34,8 @@ public class SentimentAnalysisServiceDummyImpl implements SentimentAnalysisServi
 			} catch (InterruptedException e1) {
 				logger.warn("Thread.sleep interrupted. This may be ignored (7HQZPV).", e1);
 			}
-			long delay = Long.valueOf(g3p3Properties.getProperty("g3p3.sentimentnalysis.delayms", "250"));
-			
+//			long delay = Long.valueOf(g3p3Properties.getProperty("g3p3.sentimentnalysis.delayms", "250"));
+			long delay = 2000;
 			while(true){
 				try{
 					runSentimentAnalysis();
@@ -62,29 +58,29 @@ public class SentimentAnalysisServiceDummyImpl implements SentimentAnalysisServi
 			@Override
 			public void run() {
 				SentimentQuery query = null;
-				try {
-					query = queryService.getNextQuery();
-				} catch (ServiceException e1) {
-					logger.error("Error while obtaining next query to process (QT4ZTV).", e1 );
-				}
+//				try {
+//					query = queryService.getNextQuery();
+//				} catch (ServiceException e1) {
+//					logger.error("Error while obtaining next query to process (QT4ZTV).", e1 );
+//				}
 				if(query == null) return;
 				
 				// Creating and starting a worker... this runs through AOP eaving n cloudscale.
-				DummyWorker worker = new DummyWorker();		
-				
-				PublicSentimentQuery publicQuery = new PublicSentimentQuery(query);
-				PublicSentimentQueryResult publicResult = worker.doTheAnalysisStuff(publicQuery);
-				
-				SentimentQueryResult result = new SentimentQueryResult();
-				result.setQuery(query);
-				result.setNumberOfTweets(publicResult.getNumberOfTweets());
-				result.setSentimentValue(publicResult.getSentimentValue());
-				
-				try {
-					queryService.saveResult(result);
-				} catch (ServiceException e) {
-					logger.error("Could not save result for query (G5QC4C).", e);
-				}
+//				DummyWorker worker = new DummyWorker();		
+//				
+//				PublicSentimentQuery publicQuery = new PublicSentimentQuery(query);
+//				PublicSentimentQueryResult publicResult = worker.doTheAnalysisStuff(publicQuery);
+//				
+//				SentimentQueryResult result = new SentimentQueryResult();
+//				result.setQuery(query);
+//				result.setNumberOfTweets(publicResult.getNumberOfTweets());
+//				result.setSentimentValue(publicResult.getSentimentValue());
+//				
+//				try {
+//					queryService.saveResult(result);
+//				} catch (ServiceException e) {
+//					logger.error("Could not save result for query (G5QC4C).", e);
+//				}
 				
 			}
 			

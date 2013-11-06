@@ -1,22 +1,19 @@
-package at.ac.tuwien.infosys.aic13.service.impl;
+package at.ac.tuwien.infosys.aic13.cloudscale.service.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import at.ac.tuwien.infosys.aic13.cloudscale.service.SentimentAnalysisService;
 import at.ac.tuwien.infosys.aic13.dto.SentimentQuery;
 import at.ac.tuwien.infosys.aic13.dto.SentimentQueryResult;
 import at.ac.tuwien.infosys.aic13.sentiment.TwitterSentimentAnalyzer;
 import at.ac.tuwien.infosys.aic13.sentiment.impl.TwitterSentimentAnalyzerImpl;
 import at.ac.tuwien.infosys.aic13.service.QueryService;
-import at.ac.tuwien.infosys.aic13.service.SentimentAnalysisService;
 import at.ac.tuwien.infosys.aic13.service.ServiceException;
 
 public class SentimentAnalysisServiceCloudScaleImpl implements
-		SentimentAnalysisService {
-
-	@Autowired private QueryService queryService;
-	
+		SentimentAnalysisService {	
 	private static final Logger logger = LoggerFactory.getLogger(SentimentAnalysisServiceCloudScaleImpl.class);
 	
 	@Override

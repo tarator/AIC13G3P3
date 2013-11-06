@@ -16,35 +16,8 @@ public class Main {
 	private static final Logger logger = LoggerFactory.getLogger(Main.class);
 	public static void main(String[] args){
 		Main main = new Main();
-		
-		
-		final Server server = new Server( 8080 );
-		WebAppContext root = new WebAppContext();
-		root.setWar("../../target/G3P3-0.0.1-SNAPSHOT.war");
-		root.setContextPath("/G3P3");
-		server.setHandler(root);
-		server.setStopAtShutdown(true);
-		try {
-			server.start();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		logger.info("Server started...");
-			
-		
-		logger.info("Starting server loop..");
 		main.runServerLoop();
 		logger.info("Stopped server loop... shutting down...");
-		
-		try {
-			server.setGracefulShutdown(1);
-			server.stop();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		logger.info("Shutdown complete...");
 	}
 	
 	@CloudScaleShutdown
