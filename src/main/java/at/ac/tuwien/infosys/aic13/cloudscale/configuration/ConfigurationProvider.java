@@ -32,14 +32,14 @@ public class ConfigurationProvider {
 
 	CloudScaleConfiguration cfg = CloudScaleConfigurationBuilder
 		.createLocalConfigurationBuilder()
-		.withGlobalLoggingLevel(Level.ALL) 
+		.withGlobalLoggingLevel(Level.INFO) 
 		.with(new ScalingPolicy())
 		.withMonitoring(true)
 		.withMonitoringEvents(TestEvent.class)
 		.build();
 	
 	//TODO e0756024: check every x time units? 
-	cfg.common().setScaleDownIntervalInSec(1);
+	cfg.common().setScaleDownIntervalInSec(60);
 
 	return cfg;
 

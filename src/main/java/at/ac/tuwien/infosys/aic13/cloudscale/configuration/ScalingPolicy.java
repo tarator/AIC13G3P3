@@ -10,6 +10,7 @@ import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.ac.tuwien.infosys.aic13.cloudscale.utils.CloudScaleUtils;
 import at.ac.tuwien.infosys.cloudscale.policy.IScalingPolicy;
 import at.ac.tuwien.infosys.cloudscale.vm.ClientCloudObject;
 import at.ac.tuwien.infosys.cloudscale.vm.IHost;
@@ -96,17 +97,36 @@ public class ScalingPolicy implements IScalingPolicy {
 		// for each host, check if the avg processing time for the host is below 50ms
 		// (unused hosts we are always using)
 		for (IHost host : hostPool.getHosts()) {
-			if(host.getId() == null)
-				continue;
-			long startupTime = host.getStartupTime().getTime();
-			long currentTime = System.currentTimeMillis();
-			long upTime = TimeUnit.MILLISECONDS.toMinutes(currentTime-startupTime);
-			log.info(String.format(
-				"Host %s (%s) has started before %i minutes",
-				host.getId().toString(), host.getIpAddress(), upTime
-			));
-			if((upTime >= 0 && upTime < 55) || host.getCloudObjectsCount() == 0) {
+		    log.info(CloudScaleUtils.logHost(host));
+		    if(!host.isOnline()) {
+			continue;
+		    }
+//		    if(host.getStartupTime() == null) {
+//			continue;
+//		    }
+			
+//			StringBuilder sb = new StringBuilder();
+//			sb.append("HostId=");
+//			sb.append(host.getId());
+//			sb.append(", Host online=");
+//			sb.append(host.isOnline());
+//			sb.append(", Host StartupTime=");
+//			sb.append(host.getStartupTime());
+//			
+//			log.info(sb.toString());
+//			
+//			if(host.getStartupTime() == null) continue;
+			
+//			long startupTime = host.getStartupTime().getTime();
+//			long currentTime = System.currentTimeMillis();
+//			long upTime = TimeUnit.MILLISECONDS.toMinutes(currentTime-startupTime);
+//			log.info(String.format(
+//				"Host %s (%s) has started before %l minutes",
+//				host.getId().toString(), host.getIpAddress(), uptime
+//			));
+			if(/**(upTime >= 0 && (upTime%60) < 55) ||**/ host.getCloudObjectsCount() < 5) {
 				selected = host;
+				log.info("Selected host "+host.getId());
 				break;
 			}
 		}
@@ -121,6 +141,7 @@ public class ScalingPolicy implements IScalingPolicy {
 		
 	// no suitable host found, start a new one
 	if(selected == null) {
+	    	log.info("Creating new Host");
 		selected = hostPool.startNewHost();
 	}
 	
