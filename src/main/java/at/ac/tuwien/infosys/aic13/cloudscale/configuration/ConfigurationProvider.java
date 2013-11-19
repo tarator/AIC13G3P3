@@ -2,6 +2,9 @@ package at.ac.tuwien.infosys.aic13.cloudscale.configuration;
 
 import java.util.logging.Level;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import at.ac.tuwien.infosys.aic13.cloudscale.events.TestEvent;
 import at.ac.tuwien.infosys.cloudscale.annotations.CloudScaleConfigurationProvider;
 import at.ac.tuwien.infosys.cloudscale.configuration.CloudScaleConfiguration;
@@ -12,9 +15,13 @@ import at.ac.tuwien.infosys.cloudscale.configuration.CloudScaleConfigurationBuil
  * @author e0756024 <e0756024@student.tuwien.ac.at>
  */
 public class ConfigurationProvider {
+    
+    private static final Logger log = LoggerFactory.getLogger(ConfigurationProvider.class);
 
     @CloudScaleConfigurationProvider
     public static CloudScaleConfiguration getConfiguration() {
+	log.info("-------------------------------------------------------------");
+	log.info("returning new local config");
 	return localConfig();
     }
 
@@ -32,7 +39,7 @@ public class ConfigurationProvider {
 		.build();
 	
 	//TODO e0756024: check every x time units? 
-	cfg.common().setScaleDownIntervalInSec(60);
+	cfg.common().setScaleDownIntervalInSec(1);
 
 	return cfg;
 

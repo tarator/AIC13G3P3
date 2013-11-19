@@ -229,7 +229,7 @@
 					<executable>java</executable>
 					<!-- <workingDirectory></workingDirectory> -->
 					<arguments>
-						<!--<argument>-Dcloudscale.configuration=-Dcloudscale.configuration=at.ac.tuwien.infosys.aic13.cloudscale.configuration.ConfigurationProvider</argument> -->
+						<argument>-Dcloudscale.configuration=at.ac.tuwien.infosys.aic13.cloudscale.configuration.ConfigurationProvider</argument>
 						<argument>-Xmx1G</argument>
 						<argument>-classpath</argument>
 						<classpath />
