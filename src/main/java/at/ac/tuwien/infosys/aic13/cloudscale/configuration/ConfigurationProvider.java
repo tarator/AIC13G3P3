@@ -32,7 +32,7 @@ public class ConfigurationProvider {
 
 	CloudScaleConfiguration cfg = CloudScaleConfigurationBuilder
 		.createLocalConfigurationBuilder()
-		.withGlobalLoggingLevel(Level.INFO) 
+		.withGlobalLoggingLevel(Level.WARNING) 
 		.with(new ScalingPolicy())
 		.withMonitoring(true)
 		.withMonitoringEvents(TestEvent.class)
