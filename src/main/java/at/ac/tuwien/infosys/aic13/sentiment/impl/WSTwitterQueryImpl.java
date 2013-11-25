@@ -24,7 +24,7 @@ public class WSTwitterQueryImpl implements TwitterQuery {
     
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(WSTwitterQueryImpl.class);
     private static final TwitterFactory factory = new TwitterFactory();
-    private static final int TWITTER_PAGES = 5;
+    private static final int TWITTER_PAGES = 20;
 
     @Override
     public List<Status> getTweets(String query, Date from, Date until) {
@@ -65,7 +65,7 @@ public class WSTwitterQueryImpl implements TwitterQuery {
             return list;
         } catch (TwitterException ex) {
             logger.error("Failed to retrieve tweets.", ex);
-            return new ArrayList<>();
+            return list;
         }
     }
 }
