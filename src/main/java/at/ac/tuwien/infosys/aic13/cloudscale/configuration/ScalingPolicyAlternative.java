@@ -10,8 +10,7 @@ import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import at.ac.tuwien.infosys.aic13.cloudscale.utils.CloudScaleUtils;
-import at.ac.tuwien.infosys.cloudscale.policy.IScalingPolicy;
+import at.ac.tuwien.infosys.cloudscale.policy.AbstractScalingPolicy;
 import at.ac.tuwien.infosys.cloudscale.vm.ClientCloudObject;
 import at.ac.tuwien.infosys.cloudscale.vm.IHost;
 import at.ac.tuwien.infosys.cloudscale.vm.IHostPool;
@@ -20,14 +19,15 @@ import at.ac.tuwien.infosys.cloudscale.vm.IHostPool;
  * 
  * @author e0756024 <e0756024@student.tuwien.ac.at>
  */
-public class ScalingPolicyAlternative implements IScalingPolicy {
+public class ScalingPolicyAlternative extends AbstractScalingPolicy {
 
 	private static final Logger log = LoggerFactory.getLogger(ScalingPolicyAlternative.class);
 
 	private Object lock = new Object();
 
-	private final double MAX_CPU_LOAD_PERCENTAGE = 0.95;
-	private final double MAX_RAM_USE_PERCENTAGE = 0.95;
+	private final double MAX_CPU_LOAD_PERCENTAGE = 0.90;
+	private final double MAX_RAM_USE_PERCENTAGE = 0.90;
+	private final int MAX_CLOUD_OBJECTS_PER_HOST = 10;
 
 	@Override
 	public boolean scaleDown(IHost host, IHostPool hostPool) {
@@ -49,6 +49,24 @@ public class ScalingPolicyAlternative implements IScalingPolicy {
 			if (!otherUnusedHost(hostPool, host.getId())) {
 				log.info("Not scaling down. Host is the last unused host");
 				return false;
+			}
+			
+			try {
+			    long startupTime = host.getStartupTime().getTime();
+			    long currentTime = System.currentTimeMillis();
+			    long upTime = TimeUnit.MILLISECONDS.toMinutes(currentTime - startupTime);
+			    long upTimeSeconds = TimeUnit.MILLISECONDS.toSeconds(currentTime - startupTime);
+			    // check if hour is running out - possible shutdown
+			    // candidate
+			    log.debug("-------------------------------------------------------------");
+			    log.debug("Uptime is " + upTime + " minutes (" + upTimeSeconds + "seconds)!");
+			    if ((upTime >= 0 && (upTime % 60) < 55)) {
+				log.info("Not scaling down. Host is just running " + upTime + " minutes (and we payed 60 minutes)");
+				return false;
+			    }
+			} catch (Exception e) {
+			    log.error("Error",e);
+			    return false;
 			}
 
 			log.info("Scaling down host " + host.getId().toString());
@@ -83,12 +101,13 @@ public class ScalingPolicyAlternative implements IScalingPolicy {
 		synchronized (lock) {
 
 			for (IHost currentHost : hostPool.getHosts()) {
-				log.info(CloudScaleUtils.logHost(currentHost));
+//				log.info(CloudScaleUtils.logHost(currentHost));
 				boolean newhost = false;
 
 				// if host is not online, it's either starting up or shutting
 				// down
 				if (!currentHost.isOnline()) {
+				    log.info("Host is not online");
 					// if starttime is positive then the host is shutting down
 					if (currentHost.getStartupTime() != null
 							&& currentHost.getStartupTime().getTime() > 0) {
@@ -100,37 +119,43 @@ public class ScalingPolicyAlternative implements IScalingPolicy {
 					else {
 						newhost = true;
 					}
+				} else {
+				    log.info("Host is online");
 				}
 
 				// check CPU Load
 				if (currentHost.getCurrentCPULoad() != null) {
-					log.debug("-------------------------------------------------------------");
-					log.debug("Host has a CPU Load of "
+					log.info("-------------------------------------------------------------");
+					log.info("Host has a CPU Load of "
 							+ currentHost.getCurrentCPULoad().getCpuLoad());
 					if (currentHost.getCurrentCPULoad().getCpuLoad() > MAX_CPU_LOAD_PERCENTAGE) {
-						log.debug("Host {} is busy - looking for next one", currentHost.getId());
+						log.info("Host {} is busy - looking for next one", currentHost.getId());
 						continue;
 					}
-					log.debug("OK");
+					log.info("OK");
+				} else {
+				    log.info("Host CPU Load is null");
 				}
 
 				// check RAM Usage
 				if (currentHost.getCurrentRAMUsage() != null) {
 					double ramUse = currentHost.getCurrentRAMUsage().getUsedMemory()
 							/ currentHost.getCurrentRAMUsage().getMaxMemory();
-					log.debug("-------------------------------------------------------------");
-					log.debug("Host has a Memory Usage of " + ramUse);
+					log.info("-------------------------------------------------------------");
+					log.info("Host has a Memory Usage of " + ramUse);
 					if (ramUse > MAX_RAM_USE_PERCENTAGE) {
-						log.debug("Host {} is at nearly full capacity - looking for next one",
+						log.info("Host {} is at nearly full capacity - looking for next one",
 								currentHost.getId());
 						continue;
 					}
-					log.debug("OK");
-
+					log.info("OK");
+				} else {
+				    log.info("Host RAMUsage is null");
 				}
+				
 
 				if (newhost) {
-					if (currentHost.getCloudObjectsCount() < 5) {
+					if (currentHost.getCloudObjectsCount() < MAX_CLOUD_OBJECTS_PER_HOST) {
 						selectedHost = currentHost;
 					} else {
 						continue;
@@ -139,12 +164,14 @@ public class ScalingPolicyAlternative implements IScalingPolicy {
 					long startupTime = currentHost.getStartupTime().getTime();
 					long currentTime = System.currentTimeMillis();
 					long upTime = TimeUnit.MILLISECONDS.toMinutes(currentTime - startupTime);
+					long upTimeSeconds = TimeUnit.MILLISECONDS.toSeconds(currentTime - startupTime);
 					// check if hour is running out - possible shutdown
 					// candidate
-					log.debug("-------------------------------------------------------------");
-					log.debug("Uptime is" + upTime);
+					log.info("-------------------------------------------------------------");
+					log.debug("Uptime is " + upTime + " minutes (" + upTimeSeconds + "seconds)!");
+					log.debug("Cloud Object on this Host: "+currentHost.getCloudObjectsCount());
 					if ((upTime >= 0 && (upTime % 60) < 55)
-							|| currentHost.getCloudObjectsCount() < 5) {
+							&& currentHost.getCloudObjectsCount() < MAX_CLOUD_OBJECTS_PER_HOST) {
 						selectedHost = currentHost;
 					}
 				}
@@ -159,8 +186,10 @@ public class ScalingPolicyAlternative implements IScalingPolicy {
 				log.info("Found no suitable host, scaling up");
 				selectedHost = hostPool.startNewHost();
 			} else {
+				log.info("Deploying new cloud object " + cloudObject.getCloudObjectClass().getName());
 				log.info(selectedHost.getId() != null ? "Using host "
 						+ selectedHost.getId().toString() : "Using host in startup progress");
+				
 			}
 
 			return selectedHost;

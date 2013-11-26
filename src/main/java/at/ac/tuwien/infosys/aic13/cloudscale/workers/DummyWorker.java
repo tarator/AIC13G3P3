@@ -20,7 +20,7 @@ public class DummyWorker {
     @DestructCloudObject
     public PublicSentimentQueryResult doTheAnalysisStuff(PublicSentimentQuery query){
 
-	long randomSleepTime = ThreadLocalRandom.current().nextLong(10000);
+	long randomSleepTime = ThreadLocalRandom.current().nextLong(100000) * 2;
 	long startTime = System.currentTimeMillis();
 	log.info(
 		String.format("DummyWorker will now prodcue CPU Load for %d seconds",

@@ -14,9 +14,10 @@ public class SentimentAnalysisServiceCloudScaleImpl extends SentimentAnalysisSer
 	
 	@Override
 	public void runSentimentAnalysis(){
-        SentimentAnalysisRunner runner = new SentimentAnalysisRunner();
-        Thread t = new Thread(runner);
-        t.start();
+	    SentimentAnalysisRunner runner = new SentimentAnalysisRunner();
+	    Thread t = new Thread(runner);
+	    t.setDaemon(true);
+	    t.start();
 	}
 
     private class SentimentAnalysisRunner implements Runnable{
@@ -25,7 +26,7 @@ public class SentimentAnalysisServiceCloudScaleImpl extends SentimentAnalysisSer
 
         @Override
         public void run() {
-        	PublicSentimentQuery query = getNextQuery();
+            PublicSentimentQuery query = getNextQuery();
             if(query == null || query.getQueryId() == null) return;
             
             tsa = new TwitterSentimentAnalyzerImpl();
