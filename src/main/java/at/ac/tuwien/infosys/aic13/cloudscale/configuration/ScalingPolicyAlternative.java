@@ -4,6 +4,7 @@
  */
 package at.ac.tuwien.infosys.aic13.cloudscale.configuration;
 
+import java.text.DecimalFormat;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -30,7 +31,8 @@ public class ScalingPolicyAlternative extends AbstractScalingPolicy {
 
 	private final double MAX_CPU_LOAD_PERCENTAGE = 0.90;
 	private final double MAX_RAM_USE_PERCENTAGE = 0.90;
-	private final int MAX_CLOUD_OBJECTS_PER_HOST = 10;
+	private final int MAX_CLOUD_OBJECTS_PER_HOST = 20;
+	private DecimalFormat doubleFormatter = new DecimalFormat("#0.000");
 
 	@Override
 	public boolean scaleDown(IHost host, IHostPool hostPool) {
@@ -53,23 +55,24 @@ public class ScalingPolicyAlternative extends AbstractScalingPolicy {
 				log.info("Not scaling down. Host is the last unused host");
 				return false;
 			}
-			
+
 			try {
-			    long startupTime = host.getStartupTime().getTime();
-			    long currentTime = System.currentTimeMillis();
-			    long upTime = TimeUnit.MILLISECONDS.toMinutes(currentTime - startupTime);
-			    long upTimeSeconds = TimeUnit.MILLISECONDS.toSeconds(currentTime - startupTime);
-			    // check if hour is running out - possible shutdown
-			    // candidate
-			    log.debug("-------------------------------------------------------------");
-			    log.debug("Uptime is " + upTime + " minutes (" + upTimeSeconds + "seconds)!");
-			    if ((upTime >= 0 && (upTime % 60) < 55)) {
-				log.info("Not scaling down. Host is just running " + upTime + " minutes (and we payed 60 minutes)");
-				return false;
-			    }
+				long startupTime = host.getStartupTime().getTime();
+				long currentTime = System.currentTimeMillis();
+				long upTime = TimeUnit.MILLISECONDS.toMinutes(currentTime - startupTime);
+				long upTimeSeconds = TimeUnit.MILLISECONDS.toSeconds(currentTime - startupTime);
+				// check if hour is running out - possible shutdown
+				// candidate
+				log.debug("-------------------------------------------------------------");
+				log.debug("Uptime is " + upTime + " minutes (" + upTimeSeconds + "seconds)!");
+				if ((upTime >= 0 && (upTime % 60) < 55)) {
+					log.info("Not scaling down. Host is just running " + upTime
+							+ " minutes (and we payed 60 minutes)");
+					return false;
+				}
 			} catch (Exception e) {
-			    log.error("Error",e);
-			    return false;
+				log.error("Error", e);
+				return false;
 			}
 
 			log.info("Scaling down host " + host.getId().toString());
@@ -96,67 +99,82 @@ public class ScalingPolicyAlternative extends AbstractScalingPolicy {
 
 	@Override
 	public IHost selectHost(ClientCloudObject cloudObject, IHostPool hostPool) {
-		
-		log.info("-------------------------------------------------------------");
+
+		log.info("#######################");
 		log.info("Starting to select host");
+		log.info("#######################");
 		IHost selectedHost = null;
+		
+		int cloubObjectsCount = 0;
 
 		synchronized (lock) {
 
 			for (IHost currentHost : hostPool.getHosts()) {
-//				log.info(CloudScaleUtils.logHost(currentHost));
+				log.info("-------------------------------------------------------------");
+				log.info("Checking host " + currentHost.getId());
+				cloubObjectsCount += currentHost.getCloudObjectsCount();
+				// log.info(CloudScaleUtils.logHost(currentHost));
 				boolean newhost = false;
 
-				// if host is not online, it's either starting up or shutting
-				// down
+				// if host is not online, it's starting up or shutting down
 				if (!currentHost.isOnline()) {
-				    log.info("Host is not online");
+					log.info("Host is not online");
 					// if starttime is positive then the host is shutting down
 					if (currentHost.getStartupTime() != null
 							&& currentHost.getStartupTime().getTime() > 0) {
-						// TODO is this necessary to remove host from hostpool ?
-						// hostPool.shutdownHostAsync(currentHost);
+
 						continue;
-					}
-					// no startup time, therefore the host is just starting
-					else {
+					} else {
 						newhost = true;
 					}
 				} else {
-				    log.info("Host is online");
+					log.info("Host is online");
 				}
 
 				// check CPU Load
-				
-//				IMetricsDatabase db = EventCorrelationEngine.getInstance().getMetricsDatabase();
-//		        double lastCpuLoad = (Double)db.getLastValue("TestMetric" + currentHost.getId().toString());
-//		        
-//					log.info("-------------------------------------------------------------");
-//					log.info("Host has a CPU Load of "
-//							+ lastCpuLoad);
-//					if (lastCpuLoad > MAX_CPU_LOAD_PERCENTAGE) {
-//						log.info("Host {} is busy - looking for next one", currentHost.getId());
-//						continue;
-//					}
-//					log.info("OK");
-				
+
+				// IMetricsDatabase db =
+				// EventCorrelationEngine.getInstance().getMetricsDatabase();
+				// double lastCpuLoad = (Double)db.getLastValue("TestMetric" +
+				// currentHost.getId().toString());
+				//
+				// log.info("-------------------------------------------------------------");
+				// log.info("Host has a CPU Load of "
+				// + lastCpuLoad);
+				// if (lastCpuLoad > MAX_CPU_LOAD_PERCENTAGE) {
+				// log.info("Host {} is busy - looking for next one",
+				// currentHost.getId());
+				// continue;
+				// }
+
+				if (currentHost.getCurrentCPULoad() != null) {
+					log.info("-------------------------------------------------------------");
+					log.info("Host has a CPU Load of "
+							+ doubleFormatter.format(currentHost.getCurrentCPULoad().getCpuLoad())
+							+ " on " + currentHost.getCurrentCPULoad().getProcessors()
+							+ "processors");
+					if (currentHost.getCurrentCPULoad().getCpuLoad() > MAX_CPU_LOAD_PERCENTAGE) {
+						log.info("Host {} is busy - looking for next one", currentHost.getId());
+						continue;
+					}
+				} else {
+					log.info("Host CPU Usage is null");
+				}
 
 				// check RAM Usage
 				if (currentHost.getCurrentRAMUsage() != null) {
 					double ramUse = currentHost.getCurrentRAMUsage().getUsedMemory()
 							/ currentHost.getCurrentRAMUsage().getMaxMemory();
 					log.info("-------------------------------------------------------------");
-					log.info("Host has a Memory Usage of " + ramUse);
+					log.info("Host has a Memory Usage of " + doubleFormatter.format(ramUse) + "%");
 					if (ramUse > MAX_RAM_USE_PERCENTAGE) {
 						log.info("Host {} is at nearly full capacity - looking for next one",
 								currentHost.getId());
 						continue;
 					}
-					log.info("OK");
 				} else {
-				    log.info("Host RAMUsage is null");
+					log.info("Host RAM Usage is null");
 				}
-				
 
 				if (newhost) {
 					if (currentHost.getCloudObjectsCount() < MAX_CLOUD_OBJECTS_PER_HOST) {
@@ -173,7 +191,7 @@ public class ScalingPolicyAlternative extends AbstractScalingPolicy {
 					// candidate
 					log.info("-------------------------------------------------------------");
 					log.debug("Uptime is " + upTime + " minutes (" + upTimeSeconds + "seconds)!");
-					log.debug("Cloud Object on this Host: "+currentHost.getCloudObjectsCount());
+					log.debug("Cloud Object on this Host: " + currentHost.getCloudObjectsCount());
 					if ((upTime >= 0 && (upTime % 60) < 55)
 							&& currentHost.getCloudObjectsCount() < MAX_CLOUD_OBJECTS_PER_HOST) {
 						selectedHost = currentHost;
@@ -184,34 +202,43 @@ public class ScalingPolicyAlternative extends AbstractScalingPolicy {
 
 			// if no host from hostpool satisfies the criteria start another one
 
-			log.info("-------------------------------------------------------------");
 
 			if (selectedHost == null) {
+				log.info("##################################");
 				log.info("Found no suitable host, scaling up");
+				log.info("##################################");
 				selectedHost = hostPool.startNewHost();
-//				registerHostCpuEventMetric(selectedHost);
+				// registerHostCpuEventMetric(selectedHost);
 			} else {
-				log.info("Deploying new cloud object " + cloudObject.getCloudObjectClass().getName());
+				log.info("######################################");
+				log.info("Deploying new cloud object "
+						//+ cloudObject.getCloudObjectClass().getName()
+						);
 				log.info(selectedHost.getId() != null ? "Using host "
 						+ selectedHost.getId().toString() : "Using host in startup progress");
-				
+				log.info("######################################");
+
 			}
+
+			log.info("----------------------------------");
+			log.info("Deployed Cloud Object: " + cloubObjectsCount);
+			log.info("----------------------------------");
 
 			return selectedHost;
 
 		}
 	}
-	
-	
+
 	public void registerHostCpuEventMetric(IHost host) {
-		
+
+		IMetricsDatabase db = EventCorrelationEngine.getInstance().getMetricsDatabase();
 		MonitoringMetric metric = new MonitoringMetric();
 		metric.setName("TestMetric" + host.getId().toString());
 		metric.setEpl(String
-				.format("select avg(cpuLoad) as avg_load from CPUEvent(hostId.toString() = '%s').win:time(10 sec)",
+				.format("select cpuLoad as avg_load from CPUEvent(hostId.toString() = '%s').win:time(10 sec)",
 						host.getId().toString()));
 		metric.setResultField("avg_load");
 		EventCorrelationEngine.getInstance().registerMetric(metric);
 	}
-	
+
 }

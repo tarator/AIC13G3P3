@@ -73,7 +73,7 @@ public class ConfigurationProvider {
         	.withLogging(Level.OFF)
         	.build();
 
-        config.common().setScaleDownIntervalInSec(60);
+        config.common().setScaleDownIntervalInSec(20);
         
         return config;
     }
