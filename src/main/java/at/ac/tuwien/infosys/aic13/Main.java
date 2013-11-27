@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.ac.tuwien.infosys.aic13.cloudscale.service.SentimentAnalysisService;
+import at.ac.tuwien.infosys.aic13.cloudscale.service.impl.SentimentAnalysisServiceCloudScaleImpl;
 import at.ac.tuwien.infosys.aic13.cloudscale.service.impl.SentimentAnalysisServiceDummyImpl;
 import at.ac.tuwien.infosys.cloudscale.annotations.CloudScaleShutdown;
 
