@@ -17,8 +17,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import at.ac.tuwien.infosys.aic13.Utils;
 import at.ac.tuwien.infosys.aic13.dto.Company;
 import at.ac.tuwien.infosys.aic13.dto.SentimentQuery;
+import at.ac.tuwien.infosys.aic13.publicdto.RandomQueries;
 import at.ac.tuwien.infosys.aic13.service.CompanyService;
 import at.ac.tuwien.infosys.aic13.service.QueryService;
+import at.ac.tuwien.infosys.aic13.service.RandomQueriesGenerator;
 import at.ac.tuwien.infosys.aic13.service.ServiceException;
  
 @Controller
@@ -27,6 +29,7 @@ public class DefaultController {
 	private static final Logger logger = LoggerFactory.getLogger(DefaultController.class);
 	@Autowired private CompanyService companyService;
 	@Autowired private QueryService queryService;
+	@Autowired private RandomQueriesGenerator randomQueriesGenerator;
 	
     @RequestMapping(value="/", method= RequestMethod.GET)
     public String index(Model model) {
@@ -42,6 +45,8 @@ public class DefaultController {
 			model.addAttribute("error", e.getMessage());
 		}
         model.addAttribute("companies", companies); 
+        
+        model.addAttribute("randomQueries", new RandomQueries());
         
         //the jsp which will be returned: /jsp/index.jsp
         return "index";
@@ -109,6 +114,13 @@ public class DefaultController {
 			model.addAttribute("error", e.getMessage());
 		}
     	return "queryCreated";
+    }
+    
+    @RequestMapping(value="/createRandomQueries", method=RequestMethod.POST)
+    public String createQuery(@ModelAttribute(value="randomQueries") RandomQueries randomQueries, Model model){
+    	randomQueriesGenerator.createRandomQueries(randomQueries.getCount());
+    	model.addAttribute("message", "Es werden "+randomQueries.getCount()+" zufällige Abfragen erzeugt.");
+    	return "createRandomQueriesSuccess";
     }
  
 }

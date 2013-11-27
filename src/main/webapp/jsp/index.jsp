@@ -33,9 +33,16 @@
 	        </c:forEach>
         
         </table>
+
         
-        <a href='<c:url value="/" />'>Reload page.</a>
-        
+ 		<h3>Create random queries:</h3>
+ 		<form:form id="createRandom" modelAttribute="randomQueries" action="createRandomQueries" method="POST" >
+			<form:label path="count">Number of queries to create:</form:label>
+			<form:input path="count"/>     	
+       		<button class="btn btn-primary" id="registerCompanySubmitButton" type="submit">Create queries</button>
+       	</form:form>
+       	
+       	 <a href='<c:url value="/" />'>Reload page.</a>
  
     </body>
 </html>

@@ -62,6 +62,25 @@ public class CompanyServiceImpl implements CompanyService {
 			throw new ServiceException("Could not load company list.");
 		}
 	}
+
+	@Override
+	public boolean companyExists(String companyName) throws ServiceException {
+		Company c = new Company();
+		c.setName(companyName);
+		Example ex = Example.create(c);
+		ex.enableLike();
+		ex.excludeZeroes();
+		DetachedCriteria criteria = DetachedCriteria.forClass(Company.class);
+		criteria.add(ex);
+		List<Company> companies = null;
+		try {
+			companies = dao.findByDetachedCriteria(criteria,0);
+		} catch (DaoException e) {
+			throw new ServiceException(e);
+		}
+		if(companies.size() > 0) return true;
+		return false;
+	}
 	
 	
 

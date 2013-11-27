@@ -17,4 +17,6 @@ public interface CompanyService {
 	 */
 	public List<Company> getAllCompanies() throws ServiceException;
 	
+	public boolean companyExists(String companyName) throws ServiceException;
+	
 }

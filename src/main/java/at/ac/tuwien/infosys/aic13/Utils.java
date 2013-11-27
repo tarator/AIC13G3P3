@@ -90,6 +90,11 @@ public class Utils {
 		return (int) (Math.random() * (high - low) + low);
 	}
 	
+	public static long getRandom(long low, long high) {
+		high++;
+		return (long) (Math.random() * (high - low) + low);
+	}
+	
 	public static double getRandom(double low, double high) {
 		return Math.random() * (high - low) + low;
 	}

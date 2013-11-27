@@ -13,8 +13,10 @@ import at.ac.tuwien.infosys.aic13.dao.GenericDao;
 import at.ac.tuwien.infosys.aic13.dao.HibernateDaoImpl;
 import at.ac.tuwien.infosys.aic13.service.CompanyService;
 import at.ac.tuwien.infosys.aic13.service.QueryService;
+import at.ac.tuwien.infosys.aic13.service.RandomQueriesGenerator;
 import at.ac.tuwien.infosys.aic13.service.impl.CompanyServiceImpl;
 import at.ac.tuwien.infosys.aic13.service.impl.QueryServiceImpl;
+import at.ac.tuwien.infosys.aic13.service.impl.RandomQueriesGeneratorImpl;
 
 @Component
 public class WebAppConfig {
@@ -38,6 +40,11 @@ public class WebAppConfig {
 	@Bean(name="queryService")
 	public QueryService queryService(){
 		return new QueryServiceImpl();
+	}
+	
+	@Bean(name="randomQueriesGenerator")
+	public RandomQueriesGenerator randomQueriesGenerator(){
+		return new RandomQueriesGeneratorImpl();
 	}
 	
 //	@Bean(name="sentimentAnalysisService")
