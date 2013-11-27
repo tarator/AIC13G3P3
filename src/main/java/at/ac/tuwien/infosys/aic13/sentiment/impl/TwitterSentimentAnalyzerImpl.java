@@ -32,7 +32,7 @@ public class TwitterSentimentAnalyzerImpl implements TwitterSentimentAnalyzer {
     
     @Override
     @DestructCloudObject
-    public PublicSentimentQueryResult analyze(PublicSentimentQuery sentimentQuery) {
+    public PublicSentimentQueryResult analyze(@ByValueParameter PublicSentimentQuery sentimentQuery) {
         logger.debug("Analyzing query.");
         
         PublicSentimentQueryResult result = new PublicSentimentQueryResult();
