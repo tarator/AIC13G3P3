@@ -10,6 +10,9 @@ import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import at.ac.tuwien.infosys.cloudscale.monitoring.EventCorrelationEngine;
+import at.ac.tuwien.infosys.cloudscale.monitoring.IMetricsDatabase;
+import at.ac.tuwien.infosys.cloudscale.monitoring.MonitoringMetric;
 import at.ac.tuwien.infosys.cloudscale.policy.AbstractScalingPolicy;
 import at.ac.tuwien.infosys.cloudscale.vm.ClientCloudObject;
 import at.ac.tuwien.infosys.cloudscale.vm.IHost;
@@ -124,18 +127,19 @@ public class ScalingPolicyAlternative extends AbstractScalingPolicy {
 				}
 
 				// check CPU Load
-				if (currentHost.getCurrentCPULoad() != null) {
-					log.info("-------------------------------------------------------------");
-					log.info("Host has a CPU Load of "
-							+ currentHost.getCurrentCPULoad().getCpuLoad());
-					if (currentHost.getCurrentCPULoad().getCpuLoad() > MAX_CPU_LOAD_PERCENTAGE) {
-						log.info("Host {} is busy - looking for next one", currentHost.getId());
-						continue;
-					}
-					log.info("OK");
-				} else {
-				    log.info("Host CPU Load is null");
-				}
+				
+//				IMetricsDatabase db = EventCorrelationEngine.getInstance().getMetricsDatabase();
+//		        double lastCpuLoad = (Double)db.getLastValue("TestMetric" + currentHost.getId().toString());
+//		        
+//					log.info("-------------------------------------------------------------");
+//					log.info("Host has a CPU Load of "
+//							+ lastCpuLoad);
+//					if (lastCpuLoad > MAX_CPU_LOAD_PERCENTAGE) {
+//						log.info("Host {} is busy - looking for next one", currentHost.getId());
+//						continue;
+//					}
+//					log.info("OK");
+				
 
 				// check RAM Usage
 				if (currentHost.getCurrentRAMUsage() != null) {
@@ -185,6 +189,7 @@ public class ScalingPolicyAlternative extends AbstractScalingPolicy {
 			if (selectedHost == null) {
 				log.info("Found no suitable host, scaling up");
 				selectedHost = hostPool.startNewHost();
+//				registerHostCpuEventMetric(selectedHost);
 			} else {
 				log.info("Deploying new cloud object " + cloudObject.getCloudObjectClass().getName());
 				log.info(selectedHost.getId() != null ? "Using host "
@@ -196,4 +201,17 @@ public class ScalingPolicyAlternative extends AbstractScalingPolicy {
 
 		}
 	}
+	
+	
+	public void registerHostCpuEventMetric(IHost host) {
+		
+		MonitoringMetric metric = new MonitoringMetric();
+		metric.setName("TestMetric" + host.getId().toString());
+		metric.setEpl(String
+				.format("select avg(cpuLoad) as avg_load from CPUEvent(hostId.toString() = '%s').win:time(10 sec)",
+						host.getId().toString()));
+		metric.setResultField("avg_load");
+		EventCorrelationEngine.getInstance().registerMetric(metric);
+	}
+	
 }
