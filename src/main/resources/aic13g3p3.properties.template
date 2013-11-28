@@ -5,3 +5,7 @@ g3p3.sentimentAnalysisServiceClass=at.ac.tuwien.infosys.aic13.cloudscale.service
 
 # Delay between two sentimentAnalysis calls.
 g3p3.sentimentnalysis.delayms=5000
+
+# Cloudscale ConfigurationProvider
+# local | ec2
+g3p3.cloudScale.configurationProvider=ec2
