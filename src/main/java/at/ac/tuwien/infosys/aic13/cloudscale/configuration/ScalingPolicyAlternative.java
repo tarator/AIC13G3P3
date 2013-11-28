@@ -4,7 +4,6 @@
  */
 package at.ac.tuwien.infosys.aic13.cloudscale.configuration;
 
-import java.text.DecimalFormat;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -12,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import at.ac.tuwien.infosys.cloudscale.monitoring.EventCorrelationEngine;
-import at.ac.tuwien.infosys.cloudscale.monitoring.IMetricsDatabase;
 import at.ac.tuwien.infosys.cloudscale.monitoring.MonitoringMetric;
 import at.ac.tuwien.infosys.cloudscale.policy.AbstractScalingPolicy;
 import at.ac.tuwien.infosys.cloudscale.vm.ClientCloudObject;
@@ -32,27 +30,31 @@ public class ScalingPolicyAlternative extends AbstractScalingPolicy {
 	private final double MAX_CPU_LOAD_PERCENTAGE = 0.90;
 	private final double MAX_RAM_USE_PERCENTAGE = 0.90;
 	private final int MAX_CLOUD_OBJECTS_PER_HOST = 20;
-	private DecimalFormat doubleFormatter = new DecimalFormat("#0.000");
+//	private DecimalFormat doubleFormatter = new DecimalFormat("#0.000");
+
+	
 
 	@Override
 	public boolean scaleDown(IHost host, IHostPool hostPool) {
 
 		synchronized (lock) {
-			log.info("-------------------------------------------------------------");
-			log.info("Checking whether to scale down host " + host.getId().toString());
+			
+			log.debug("-------------------------------------------------------------");
+
+			log.debug("Checking whether to scale down host " + host.getId().toString());
 
 			if (!host.isOnline()) {
-				log.info("Not scaling down. Host is either just starting up or going offline");
+				log.debug("Not scaling down. Host is either just starting up or going offline");
 				return false;
 			}
 
 			if (host.getCloudObjectsCount() > 0) {
-				log.info("Not scaling down. Host is in use");
+				log.debug("Not scaling down. Host is in use");
 				return false;
 			}
 
 			if (!otherUnusedHost(hostPool, host.getId())) {
-				log.info("Not scaling down. Host is the last unused host");
+				log.debug("Not scaling down. Host is the last unused host");
 				return false;
 			}
 
@@ -61,22 +63,22 @@ public class ScalingPolicyAlternative extends AbstractScalingPolicy {
 				long currentTime = System.currentTimeMillis();
 				long upTime = TimeUnit.MILLISECONDS.toMinutes(currentTime - startupTime);
 				long upTimeSeconds = TimeUnit.MILLISECONDS.toSeconds(currentTime - startupTime);
-				// check if hour is running out - possible shutdown
-				// candidate
-				log.debug("-------------------------------------------------------------");
+				// check if hour is running out - possible shutdown candidate
 				log.debug("Uptime is " + upTime + " minutes (" + upTimeSeconds + "seconds)!");
 				if ((upTime >= 0 && (upTime % 60) < 3)) {
-					log.info("Not scaling down. Host is just running " + upTime
-							+ " minutes (and we payed 60 minutes)");
+					log.debug("Not scaling down. Host is just running " + upTime
+							+ " minutes (and we payed for 60 minutes)");
 					return false;
 				}
 			} catch (Exception e) {
 				log.error("Error", e);
 				return false;
 			}
+			log.debug("##############################################################");
+			log.debug("Scaling down host " + host.getId().toString());
+			log.debug("##############################################################");
 
-			log.info("Scaling down host " + host.getId().toString());
-
+			
 			return true;
 		}
 	}
@@ -100,9 +102,13 @@ public class ScalingPolicyAlternative extends AbstractScalingPolicy {
 	@Override
 	public IHost selectHost(ClientCloudObject cloudObject, IHostPool hostPool) {
 
-		log.info("#######################");
-		log.info("Starting to select host");
-		log.info("#######################");
+		
+
+		log.debug("#######################");
+
+		log.debug("Starting to select host");
+		log.debug("#######################\n");
+		
 		IHost selectedHost = null;
 		IHost backupHost = null;
 
@@ -111,15 +117,18 @@ public class ScalingPolicyAlternative extends AbstractScalingPolicy {
 		synchronized (lock) {
 
 			for (IHost currentHost : hostPool.getHosts()) {
-				log.info("-------------------------------------------------------------");
-				log.info("Checking host " + currentHost.getId());
+				
+
+				log.debug("-------------------------------------------------------------");
+
+				log.debug("Checking host " + currentHost.getId());
 				cloubObjectsCount += currentHost.getCloudObjectsCount();
-				// log.info(CloudScaleUtils.logHost(currentHost));
+				// log.debug(CloudScaleUtils.logHost(currentHost));
 				boolean newhost = false;
 
 				// if host is not online, it's starting up or shutting down
 				if (!currentHost.isOnline()) {
-					log.info("Host is not online");
+					log.debug("Host is not online");
 					// if starttime is positive then the host is shutting down
 					if (currentHost.getStartupTime() != null
 							&& currentHost.getStartupTime().getTime() > 0) {
@@ -129,61 +138,40 @@ public class ScalingPolicyAlternative extends AbstractScalingPolicy {
 						newhost = true;
 					}
 				} else {
-					log.info("Host is online");
+					log.debug("Host is online");
 				}
 
-				// check CPU Load
 
-				// IMetricsDatabase db =
-				// EventCorrelationEngine.getInstance().getMetricsDatabase();
-				// double lastCpuLoad = (Double)db.getLastValue("TestMetric" +
-				// currentHost.getId().toString());
-				//
-				// log.info("-------------------------------------------------------------");
-				// log.info("Host has a CPU Load of "
-				// + lastCpuLoad);
-				// if (lastCpuLoad > MAX_CPU_LOAD_PERCENTAGE) {
-				// log.info("Host {} is busy - looking for next one",
-				// currentHost.getId());
-				// continue;
-				// }
-
+				//check CPU Load
 				if (currentHost.getCurrentCPULoad() != null) {
-					log.info("-------------------------------------------------------------");
-					// log.info("Host has a CPU Load of "
+					log.debug("-------------------------------------------------------------");
+					// log.debug("Host has a CPU Load of "
 					// +
 					// doubleFormatter.format(currentHost.getCurrentCPULoad().getCpuLoad())
 					// + " on " +
 					// currentHost.getCurrentCPULoad().getProcessors()
 					// + "processors");
-					log.debug("CPU Load is ok");
 					if (currentHost.getCurrentCPULoad().getCpuLoad() > MAX_CPU_LOAD_PERCENTAGE) {
-						log.info("Host {} is busy - looking for next one", currentHost.getId());
+						log.debug("Host" + currentHost.getId() + "is busy - looking for next one");
 						continue;
 					} else {
 						log.debug("CPU Load is ok");
 					}
-				} else {
-					log.info("Host CPU Usage is null - Likely the host is just starting up");
-				}
+				} 
 
 				// check RAM Usage
 				if (currentHost.getCurrentRAMUsage() != null) {
 					double ramUse = currentHost.getCurrentRAMUsage().getUsedMemory()
 							/ currentHost.getCurrentRAMUsage().getMaxMemory();
-					log.info("-------------------------------------------------------------");
-					// log.info("Host has a Memory Usage of " +
+					// log.debug("Host has a Memory Usage of " +
 					// doubleFormatter.format(ramUse) + "%");
 					if (ramUse > MAX_RAM_USE_PERCENTAGE) {
-						log.info("Host {} is at nearly full capacity - looking for next one",
-								currentHost.getId());
+						log.debug("Host " + currentHost.getId()
+								+ "is at nearly full capacity - looking for next one");
 						continue;
 					} else {
 						log.debug("RAM Usage is ok");
-
 					}
-				} else {
-					log.info("Host RAM Usage is null - Likely the host is just starting up");
 				}
 
 				if (newhost) {
@@ -199,7 +187,6 @@ public class ScalingPolicyAlternative extends AbstractScalingPolicy {
 					long upTimeSeconds = TimeUnit.MILLISECONDS.toSeconds(currentTime - startupTime);
 					// check if hour is running out - possible shutdown
 					// candidate
-					log.info("-------------------------------------------------------------");
 					log.debug("Uptime is " + upTime + " minutes (" + upTimeSeconds + "seconds)!");
 					log.debug("Cloud Object on this Host: " + currentHost.getCloudObjectsCount());
 					if (currentHost.getCloudObjectsCount() < MAX_CLOUD_OBJECTS_PER_HOST) {
@@ -212,37 +199,43 @@ public class ScalingPolicyAlternative extends AbstractScalingPolicy {
 
 					}
 				}
+				// } catch (IOException e) {
+				// // TODO Auto-generated catch block
+				// e.printStackTrace();
+				// }
 			}
 
 			// end of loop
 
-			
-			//first check if we have selected a host - if not, replace it by backup host if it exists
+			// first check if we have selected a host - if not, replace it by
+			// backup host if it exists
+			// try {
 			if (selectedHost == null && backupHost != null) {
 				selectedHost = backupHost;
 			}
 
-			// if no host from hostpool satisfied the criteria, start another one
+			// if no host from hostpool satisfied the criteria, start another
+			// one
 			if (selectedHost == null) {
-				log.info("##################################");
-				log.info("Found no suitable host, scaling up");
-				log.info("##################################");
+				log.debug("##################################");
+				log.debug("Found no suitable host, scaling up");
+				log.debug("##################################");
 				selectedHost = hostPool.startNewHost();
 				// registerHostCpuEventMetric(selectedHost);
 			} else {
-				log.info("######################################");
-				log.info("Deploying new cloud object "
+				log.debug("######################################");
+				log.debug("Deploying new cloud object "
 				// + cloudObject.getCloudObjectClass().getName()
 				);
-				log.info(selectedHost.getId() != null ? "Using host "
+				log.debug(selectedHost.getId() != null ? "Using host "
 						+ selectedHost.getId().toString() : "Using host in startup progress");
-				log.info("######################################");
 			}
 
-			log.info("----------------------------------");
-			log.info("Overall Deployed Cloud Object: " + cloubObjectsCount);
-			log.info("----------------------------------");
-
+			log.debug("Overall Deployed Cloud Object are now: " + cloubObjectsCount);
+			log.debug("######################################\n");
+			// } catch (IOException e) {
+			// e.printStackTrace();
+			// }
 			return selectedHost;
 
 		}

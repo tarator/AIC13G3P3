@@ -69,7 +69,7 @@ public class ConfigurationProvider {
         	.with(ec2Config)
         	.with(new ScalingPolicyAlternative())
         	.withMQServer(MQ_HOSTNAME, MQ_PORT)
-        	.withMonitoring(false)
+        	.withMonitoring(true)
         	.withLogging(Level.OFF)
         	.build();
 
