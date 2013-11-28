@@ -65,7 +65,7 @@ public class ScalingPolicyAlternative extends AbstractScalingPolicy {
 				// candidate
 				log.debug("-------------------------------------------------------------");
 				log.debug("Uptime is " + upTime + " minutes (" + upTimeSeconds + "seconds)!");
-				if ((upTime >= 0 && (upTime % 60) < 55)) {
+				if ((upTime >= 0 && (upTime % 60) < 3)) {
 					log.info("Not scaling down. Host is just running " + upTime
 							+ " minutes (and we payed 60 minutes)");
 					return false;
@@ -104,7 +104,8 @@ public class ScalingPolicyAlternative extends AbstractScalingPolicy {
 		log.info("Starting to select host");
 		log.info("#######################");
 		IHost selectedHost = null;
-		
+		IHost backupHost = null;
+
 		int cloubObjectsCount = 0;
 
 		synchronized (lock) {
@@ -149,16 +150,21 @@ public class ScalingPolicyAlternative extends AbstractScalingPolicy {
 
 				if (currentHost.getCurrentCPULoad() != null) {
 					log.info("-------------------------------------------------------------");
-					log.info("Host has a CPU Load of "
-							+ doubleFormatter.format(currentHost.getCurrentCPULoad().getCpuLoad())
-							+ " on " + currentHost.getCurrentCPULoad().getProcessors()
-							+ "processors");
+					// log.info("Host has a CPU Load of "
+					// +
+					// doubleFormatter.format(currentHost.getCurrentCPULoad().getCpuLoad())
+					// + " on " +
+					// currentHost.getCurrentCPULoad().getProcessors()
+					// + "processors");
+					log.debug("CPU Load is ok");
 					if (currentHost.getCurrentCPULoad().getCpuLoad() > MAX_CPU_LOAD_PERCENTAGE) {
 						log.info("Host {} is busy - looking for next one", currentHost.getId());
 						continue;
+					} else {
+						log.debug("CPU Load is ok");
 					}
 				} else {
-					log.info("Host CPU Usage is null");
+					log.info("Host CPU Usage is null - Likely the host is just starting up");
 				}
 
 				// check RAM Usage
@@ -166,14 +172,18 @@ public class ScalingPolicyAlternative extends AbstractScalingPolicy {
 					double ramUse = currentHost.getCurrentRAMUsage().getUsedMemory()
 							/ currentHost.getCurrentRAMUsage().getMaxMemory();
 					log.info("-------------------------------------------------------------");
-					log.info("Host has a Memory Usage of " + doubleFormatter.format(ramUse) + "%");
+					// log.info("Host has a Memory Usage of " +
+					// doubleFormatter.format(ramUse) + "%");
 					if (ramUse > MAX_RAM_USE_PERCENTAGE) {
 						log.info("Host {} is at nearly full capacity - looking for next one",
 								currentHost.getId());
 						continue;
+					} else {
+						log.debug("RAM Usage is ok");
+
 					}
 				} else {
-					log.info("Host RAM Usage is null");
+					log.info("Host RAM Usage is null - Likely the host is just starting up");
 				}
 
 				if (newhost) {
@@ -192,17 +202,27 @@ public class ScalingPolicyAlternative extends AbstractScalingPolicy {
 					log.info("-------------------------------------------------------------");
 					log.debug("Uptime is " + upTime + " minutes (" + upTimeSeconds + "seconds)!");
 					log.debug("Cloud Object on this Host: " + currentHost.getCloudObjectsCount());
-					if ((upTime >= 0 && (upTime % 60) < 55)
-							&& currentHost.getCloudObjectsCount() < MAX_CLOUD_OBJECTS_PER_HOST) {
-						selectedHost = currentHost;
+					if (currentHost.getCloudObjectsCount() < MAX_CLOUD_OBJECTS_PER_HOST) {
+						if (upTime >= 0 && (upTime % 60) < 3) {
+							selectedHost = currentHost;
+						} else {
+							backupHost = currentHost;
+							log.debug("Selected Backup Host");
+						}
+
 					}
 				}
-
 			}
 
-			// if no host from hostpool satisfies the criteria start another one
+			// end of loop
 
+			
+			//first check if we have selected a host - if not, replace it by backup host if it exists
+			if (selectedHost == null && backupHost != null) {
+				selectedHost = backupHost;
+			}
 
+			// if no host from hostpool satisfied the criteria, start another one
 			if (selectedHost == null) {
 				log.info("##################################");
 				log.info("Found no suitable host, scaling up");
@@ -212,16 +232,15 @@ public class ScalingPolicyAlternative extends AbstractScalingPolicy {
 			} else {
 				log.info("######################################");
 				log.info("Deploying new cloud object "
-						//+ cloudObject.getCloudObjectClass().getName()
-						);
+				// + cloudObject.getCloudObjectClass().getName()
+				);
 				log.info(selectedHost.getId() != null ? "Using host "
 						+ selectedHost.getId().toString() : "Using host in startup progress");
 				log.info("######################################");
-
 			}
 
 			log.info("----------------------------------");
-			log.info("Deployed Cloud Object: " + cloubObjectsCount);
+			log.info("Overall Deployed Cloud Object: " + cloubObjectsCount);
 			log.info("----------------------------------");
 
 			return selectedHost;
@@ -231,7 +250,6 @@ public class ScalingPolicyAlternative extends AbstractScalingPolicy {
 
 	public void registerHostCpuEventMetric(IHost host) {
 
-		IMetricsDatabase db = EventCorrelationEngine.getInstance().getMetricsDatabase();
 		MonitoringMetric metric = new MonitoringMetric();
 		metric.setName("TestMetric" + host.getId().toString());
 		metric.setEpl(String
