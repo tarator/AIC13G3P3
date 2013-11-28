@@ -12,6 +12,8 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
+
+   Modified by Roman Khassraf <roman at khassraf.at>
 */
 package at.ac.tuwien.infosys.aic13.sentiment.impl;
 
@@ -57,7 +59,6 @@ public class ClassifierImpl implements Classifier
             }
             catch(Exception ex)
             {
-                // TODO: logging
                 return SentimentType.Neutral;
             }
         }

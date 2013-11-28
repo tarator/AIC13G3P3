@@ -12,15 +12,19 @@ import at.ac.tuwien.infosys.aic13.publicdto.PublicSentimentQueryResult;
 import at.ac.tuwien.infosys.aic13.sentiment.Classifier;
 import at.ac.tuwien.infosys.aic13.sentiment.TwitterQuery;
 import at.ac.tuwien.infosys.aic13.sentiment.TwitterSentimentAnalyzer;
+import at.ac.tuwien.infosys.aic13.sentiment.WEKAFileProvider;
 import at.ac.tuwien.infosys.cloudscale.annotations.ByValueParameter;
 import at.ac.tuwien.infosys.cloudscale.annotations.CloudObject;
 import at.ac.tuwien.infosys.cloudscale.annotations.DestructCloudObject;
+import at.ac.tuwien.infosys.cloudscale.annotations.FileDependency;
+import at.ac.tuwien.infosys.cloudscale.annotations.FileDependency.FileAccess;
 
 /**
  *
  * @author Roman Khassraf <roman at khassraf.at>
  */
 @CloudObject
+@FileDependency(dependencyProvider = WEKAFileProvider.class, accessType = FileAccess.ReadOnly)
 public class TwitterSentimentAnalyzerImpl implements TwitterSentimentAnalyzer {
 
     private static final TwitterQuery twitterQuery = new WSTwitterQueryImpl();
