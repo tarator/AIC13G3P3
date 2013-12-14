@@ -22,7 +22,7 @@ public class DummyWorker {
 
 		// long randomSleepTime = ThreadLocalRandom.current().nextLong(100000) *
 		// 2;
-		long randomSleepTime = ThreadLocalRandom.current().nextLong(10000);
+		long randomSleepTime = ThreadLocalRandom.current().nextLong(50000);
 
 		long startTime = System.currentTimeMillis();
 		log.info(String.format("DummyWorker will now prodcue CPU Load for %d seconds",

@@ -254,7 +254,7 @@
 						<contextPath>/G3P3/</contextPath>
 					</webApp>
 					<!-- <daemon>true</daemon> <stopPort>8181</stopPort> <stopKey>stop-webapp</stopKey> -->
-					<scanIntervalSeconds>10</scanIntervalSeconds>
+					<scanIntervalSeconds>0</scanIntervalSeconds>
 				</configuration>
 			</plugin>
 		</plugins>

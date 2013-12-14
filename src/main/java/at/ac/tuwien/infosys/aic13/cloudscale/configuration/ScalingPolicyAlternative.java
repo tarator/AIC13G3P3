@@ -29,7 +29,7 @@ public class ScalingPolicyAlternative extends AbstractScalingPolicy {
 
 	private final double MAX_CPU_LOAD_PERCENTAGE = 0.90;
 	private final double MAX_RAM_USE_PERCENTAGE = 0.90;
-	private final int MAX_CLOUD_OBJECTS_PER_HOST = 20;
+	private final int MAX_CLOUD_OBJECTS_PER_HOST = 10;
 //	private DecimalFormat doubleFormatter = new DecimalFormat("#0.000");
 
 	
