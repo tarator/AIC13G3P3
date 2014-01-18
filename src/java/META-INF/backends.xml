@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<backends>
+  <backend name="query-backend">
+    <class>B1</class>
+    <instances>1</instances>
+    <options>
+      <!--<dynamic>true</dynamic>-->
+      <!--<public>true</public>-->
+    </options>
+  </backend>
+</backends>
