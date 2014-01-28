@@ -1,11 +1,11 @@
 
 # Class used for SentimentAnalysis. Must implement SentimentAnalysisService
-g3p3.sentimentAnalysisServiceClass=at.ac.tuwien.infosys.aic13.cloudscale.service.impl.SentimentAnalysisServiceDummyImpl
-#g3p3.sentimentAnalysisServiceClass=at.ac.tuwien.infosys.aic13.cloudscale.service.impl.SentimentAnalysisServiceCloudScaleImpl
+#g3p3.sentimentAnalysisServiceClass=at.ac.tuwien.infosys.aic13.cloudscale.service.impl.SentimentAnalysisServiceDummyImpl
+g3p3.sentimentAnalysisServiceClass=at.ac.tuwien.infosys.aic13.cloudscale.service.impl.SentimentAnalysisServiceCloudScaleImpl
 
 # Delay between two sentimentAnalysis calls.
 g3p3.sentimentnalysis.delayms=5000
 
 # Cloudscale ConfigurationProvider
 # local | ec2
-g3p3.cloudScale.configurationProvider=ec2
+g3p3.cloudScale.configurationProvider=local
