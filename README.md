@@ -40,10 +40,10 @@ Use the following command to install the necessary software on your Kubuntu Box:
 ## Start the application
 
 * You have to start webapp and cloudscale-app seperately (e.g. use two different terminals):
-* Start Jetty and webapp: run 'mvn compile jetty:run' from the project's main directory.
-* Start cloudscale app: run 'mvn exec:exec'
-* Start your browser and type 'http://localhost:8080/G3P3/'
-* To stop the system write "end" into the java-console of the cloudscale-app.
+* Start Jetty and webapp: run __mvn compile jetty:run__ from the project's main directory.
+* Start cloudscale app: run __mvn exec:exec__
+* Start your browser and type __http://localhost:8080/G3P3/__
+* To stop the system write __end__ into the java-console of the cloudscale-app (Important, else you have to kill all processes manually).
 
 
 # Instructions for CloudScale and Google PaaS
