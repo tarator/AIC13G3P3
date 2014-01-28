@@ -33,14 +33,14 @@ git clone https://github.com/tarator/AIC13G3P3.git
 git checkout aws
 ```
 
-## Setup
+## Setup and Configuration
 
 * Setup Mysql, create Database 'AIC13G3P3' (utf8_bin) and User 'AIC13G3P3' with password 'AIC13G3P3' and grant all rigths to the database.
 * Copy file '/src/main/resources/aic13g3p3.proerties.template' to '/src/main/resources/aic13g3p3.properties' and adjust the necessary configurations.
 * Copy file '/src/main/resources/twitter4j.proerties.template' to '/src/main/resources/twitter4j.properties' and fill in the secrets Twitter.
 * Copy file '/src/main/resources/aws.proerties.template' to '/src/main/resources/aws.properties' and fill in the secrets for Amazon AWS.
 * You may change MySQL Config here: /src/main/webapp/WEB-INF/dispatcher-servlet.xml
-* If you don't want the DB to be created from scratch every time you start the application, you may also change the property "hibernate.hbm2ddl.auto" from "create-drop" to "update" in the file "dispatcher-servlet.xml"
+* If you don't want the DB to be created from scratch every time you start the application, you may also change the property "hibernate.hbm2ddl.auto" from "create-drop" to "update" in the file "dispatcher-servlet.xml" AND in the file '/src/main/java/at/ac/tuwien/infosys/aic13/cloudscale/service/SentimentAnalysisService.java'
 
 ## Start the application
 
@@ -49,6 +49,7 @@ git checkout aws
 * Start cloudscale app: run __mvn exec:exec__
 * Start your browser and type __http://localhost:8080/G3P3/__
 * To stop the system write __end__ into the java-console of the cloudscale-app (Important, else you have to kill all processes manually).
+
 
 
 # Instructions for CloudScale and Google PaaS
