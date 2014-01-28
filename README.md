@@ -3,7 +3,9 @@ AIC13G3P3
 
 # Get the code
 
-  git clone https://github.com/tarator/AIC13G3P3.git
+```
+git clone https://github.com/tarator/AIC13G3P3.git
+```
 
 # Basic operating system
 
@@ -17,16 +19,19 @@ Kubuntu 13.04
 * MySQL Server 5.5.35-0ubuntu0.13.10.1
 
 Use the following command to install the necessary software on your Kubuntu Box:
-
-  sudo apt-get install openjdk-7-jdk openjdk-7-jre maven mysql-server mysql-client mysql-common
-
+```
+sudo apt-get install openjdk-7-jdk openjdk-7-jre maven mysql-server mysql-client mysql-common
+```
 
 
 # Instructions for CloudScale and Amazon WS  
 
 ## Checkout the right branch from github
-  git clone https://github.com/tarator/AIC13G3P3.git
-  git checkout aws
+
+```
+git clone https://github.com/tarator/AIC13G3P3.git
+git checkout aws
+```
 
 ## Setup
 
