@@ -1,0 +1,5 @@
+debug=false
+oauth.consumerKey=<fill in>
+oauth.consumerSecret=<fill in>
+oauth.accessToken=<fill in>
+oauth.accessTokenSecret=<fill in>
