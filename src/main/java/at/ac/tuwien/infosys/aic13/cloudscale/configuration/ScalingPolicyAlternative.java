@@ -29,7 +29,7 @@ public class ScalingPolicyAlternative extends AbstractScalingPolicy {
 
 	private final double MAX_CPU_LOAD_PERCENTAGE = 0.90;
 	private final double MAX_RAM_USE_PERCENTAGE = 0.90;
-	private final int MAX_CLOUD_OBJECTS_PER_HOST = 10;
+	private final int MAX_CLOUD_OBJECTS_PER_HOST = 25;
 //	private DecimalFormat doubleFormatter = new DecimalFormat("#0.000");
 
 	
@@ -65,9 +65,8 @@ public class ScalingPolicyAlternative extends AbstractScalingPolicy {
 				long upTimeSeconds = TimeUnit.MILLISECONDS.toSeconds(currentTime - startupTime);
 				// check if hour is running out - possible shutdown candidate
 				log.debug("Uptime is " + upTime + " minutes (" + upTimeSeconds + "seconds)!");
-				if ((upTime >= 0 && (upTime % 60) < 3)) {
-					log.debug("Not scaling down. Host is just running " + upTime
-							+ " minutes (and we payed for 60 minutes)");
+				if ((upTime >= 0 && (upTime % 60) <57)) {
+					log.debug("Not scaling down. Host has not reached end of full hour)");
 					return false;
 				}
 			} catch (Exception e) {
@@ -105,7 +104,6 @@ public class ScalingPolicyAlternative extends AbstractScalingPolicy {
 		
 
 		log.debug("#######################");
-
 		log.debug("Starting to select host");
 		log.debug("#######################\n");
 		
@@ -190,7 +188,7 @@ public class ScalingPolicyAlternative extends AbstractScalingPolicy {
 					log.debug("Uptime is " + upTime + " minutes (" + upTimeSeconds + "seconds)!");
 					log.debug("Cloud Object on this Host: " + currentHost.getCloudObjectsCount());
 					if (currentHost.getCloudObjectsCount() < MAX_CLOUD_OBJECTS_PER_HOST) {
-						if (upTime >= 0 && (upTime % 60) < 3) {
+						if (upTime >= 0 && (upTime % 60) < 57) {
 							selectedHost = currentHost;
 						} else {
 							backupHost = currentHost;
@@ -231,7 +229,6 @@ public class ScalingPolicyAlternative extends AbstractScalingPolicy {
 						+ selectedHost.getId().toString() : "Using host in startup progress");
 			}
 
-			log.debug("Overall Deployed Cloud Object are now: " + cloubObjectsCount);
 			log.debug("######################################\n");
 			// } catch (IOException e) {
 			// e.printStackTrace();
