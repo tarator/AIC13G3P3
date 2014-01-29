@@ -50,9 +50,16 @@ git checkout aws
 * Start your browser and type __http://localhost:8080/G3P3/__
 * To stop the system write __end__ into the java-console of the cloudscale-app (Important, else you have to kill all processes manually).
 
+## Functions
 
+You can change between local Cloudscale run and AWS run by changing the property __g3p3.cloudScale.configurationProvider__ in the file __aic13g3p3.proerties__ (see above)
 
-# Instructions for CloudScale and Google PaaS
+* For a quick start, you can create a set of companies (= twitter hastags) and some example queries by pressing the Button "Create queries".
+* You can also create manually companies (= twitter hashtags) by providing a name and pressing "Register Company".
+* On the start page you see also the list of companies. Press on a link to see all queries for the given company.
+* On a company's page all queries are shown and you can create a new query with a date range for twitter sentiment analysis.
+* After you've started a query it takes a while and the result is shown in the list.
+
 
 # Discussion
 * Goole group: https://groups.google.com/forum/#!forum/aic13g3p3
